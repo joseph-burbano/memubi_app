@@ -69,22 +69,31 @@ export interface FilaResumen {
         inset: 0;
         z-index: 10;
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: center;
-        padding: 3rem 1.5rem;
-        overflow-y: auto;
+        padding: 1.5rem;
         /* El mockup cubre con text-primary, no con negro puro: el velo
          * es del sistema de color, no un overlay genérico. */
         background: color-mix(in srgb, var(--ui-text-primary) 88%, transparent);
       }
+      /* Nunca más alto que la ventana. Con el pop up a su alto natural,
+       * en una pantalla de portátil los botones caían fuera y no había
+       * forma de confirmar ni de volver. */
       .popup {
+        display: flex;
+        flex-direction: column;
         width: 100%;
         max-width: 42.5rem;
+        max-height: 100%;
         background: var(--ui-surface);
         border-radius: 1.25rem;
         overflow: hidden;
       }
+      /* Lo único que se desplaza: las acciones se quedan a la vista. */
       .popup__cuerpo {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
         padding: 2.5rem;
       }
       .popup__titulo {

@@ -72,12 +72,13 @@ import { BarraSuperiorComponent } from '../../ui/barra-superior';
       .pantalla {
         display: flex;
         flex-direction: column;
-        min-height: 100dvh;
+        height: 100dvh;
         /* Transparente para que se vea la textura del fondo. */
         background: transparent;
       }
       .datos {
         flex: 1;
+        min-height: 0;
         overflow-y: auto;
         padding: 1.5rem 1.25rem;
         padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));

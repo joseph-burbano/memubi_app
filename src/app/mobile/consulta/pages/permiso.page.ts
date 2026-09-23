@@ -66,12 +66,14 @@ import { BotonComponent } from '../../../ui/boton';
       .pantalla {
         display: flex;
         flex-direction: column;
-        min-height: 100dvh;
+        height: 100dvh;
         /* Transparente para que se vea la textura del fondo. */
         background: transparent;
       }
       .permiso {
         display: flex;
+        min-height: 0;
+        overflow-y: auto;
         flex-direction: column;
         flex: 1;
         padding: 0 1.25rem;

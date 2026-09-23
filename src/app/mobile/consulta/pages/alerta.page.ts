@@ -71,12 +71,14 @@ import { nombreCategoria } from '../../../core/models/categoria.model';
       .pantalla {
         display: flex;
         flex-direction: column;
-        min-height: 100dvh;
+        height: 100dvh;
         /* Transparente para que se vea la textura del fondo. */
         background: transparent;
       }
       .alerta {
         display: flex;
+        min-height: 0;
+        overflow-y: auto;
         flex-direction: column;
         flex: 1;
         padding: 1.75rem 1.25rem;

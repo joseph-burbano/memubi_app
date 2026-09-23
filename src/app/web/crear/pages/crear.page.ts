@@ -4,6 +4,7 @@ import { BarraSuperiorWebComponent } from '../../ui/barra-superior.web';
 import { OpcionComponent } from '../ui/opcion';
 import { MapaRadioComponent } from '../ui/mapa-radio';
 import { ConfirmacionComponent, FilaResumen } from '../ui/confirmacion';
+import { SeleccionarDireccionComponent } from '../ui/seleccionar-direccion';
 import { BotonComponent } from '../../../ui/boton';
 import { BorradorStore } from '../../../core/store/borrador.store';
 import { PendientesStore } from '../../../core/store/pendientes.store';
@@ -49,6 +50,7 @@ import { DIRECCIONES_MOCK } from '../../../core/mock/lugares.mock';
     OpcionComponent,
     MapaRadioComponent,
     ConfirmacionComponent,
+    SeleccionarDireccionComponent,
     BotonComponent,
   ],
   template: `
@@ -179,7 +181,9 @@ import { DIRECCIONES_MOCK } from '../../../core/mock/lugares.mock';
                 seleccionable
               />
 
-              <ui-boton variante="secundario" anchoCompleto>Ampliar mapa</ui-boton>
+              <ui-boton variante="secundario" anchoCompleto (click)="ampliando.set(true)">
+                Ampliar mapa
+              </ui-boton>
 
               <div class="resumen">
                 <p class="ui-overline resumen__rotulo">Dirección seleccionada</p>
@@ -228,6 +232,17 @@ import { DIRECCIONES_MOCK } from '../../../core/mock/lugares.mock';
         </div>
       </main>
 
+      <!-- MW2c -->
+      @if (ampliando()) {
+        <web-seleccionar-direccion
+          [radio]="radio()"
+          [direccion]="direccion() ?? ''"
+          [candidatos]="direcciones"
+          (cerrar)="ampliando.set(false)"
+          (usar)="usarDireccion($event)"
+        />
+      }
+
       <!-- MW3 · MW3b · MW5c · MW5d -->
       @if (confirmando()) {
         <web-confirmacion
@@ -243,10 +258,18 @@ import { DIRECCIONES_MOCK } from '../../../core/mock/lugares.mock';
   `,
   styles: [
     `
+      /* La barra superior se queda fija y solo se desplaza el contenido:
+       * es una barra de aplicación, no parte del documento. */
       .pagina {
-        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
       }
       .crear {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        width: 100%;
         max-width: 90rem;
         margin: 0 auto;
         padding: 3rem 6rem 2.5rem;
@@ -432,6 +455,7 @@ export class CrearPage implements OnInit {
   readonly esEdicion = computed(() => !!this.id());
 
   readonly confirmando = signal(false);
+  readonly ampliando = signal(false);
 
   readonly categorias = CATEGORIAS;
   readonly radios = RADIOS;
@@ -539,6 +563,12 @@ export class CrearPage implements OnInit {
 
   elegirDireccion(d: string): void {
     this.borrador.parchar({ direccion: d });
+  }
+
+  /** MW2c -> MW2b: el pop up devuelve la dirección y se cierra. */
+  usarDireccion(d: string): void {
+    this.borrador.parchar({ direccion: d.trim() });
+    this.ampliando.set(false);
   }
 
   elegirRadio(r: RadioAviso): void {

@@ -87,3 +87,25 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+
+/* ---------- El contenedor de scroll de cada página ----------
+ *
+ * Ionic pone `body { position: fixed; overflow: hidden }` porque asume
+ * que TODA pantalla vive dentro de un `<ion-content>`, que es su
+ * contenedor de scroll. Nuestras páginas no lo usan: son componentes
+ * propios, maquetados contra el mockup.
+ *
+ * Sin esto el contenido que no cabe simplemente NO SE PUEDE ALCANZAR.
+ * No hay barra de desplazamiento ni rueda que valga: el documento no
+ * crece. En la página de creación web eso dejaba fuera media pantalla.
+ *
+ * No es solo cosa de web. En móvil las pantallas caben hoy, pero el
+ * público de esta app sube el tamaño de letra del sistema: en cuanto el
+ * texto crece, sin esto los botones quedarían fuera de alcance. Es
+ * exactamente lo que prometimos que iba a funcionar.
+ */
+ion-router-outlet > * {
+  display: block;
+  height: 100%;
+  overflow-y: auto;
+}
