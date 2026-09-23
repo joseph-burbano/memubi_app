@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 /**
- * Móvil · primer uso, consulta, alerta y ajustes.   DUEÑO: Joseph
+ * Móvil · primer uso, consulta, alerta y ajustes.   DUEÑO: Juan David
  *
  * Son más pantallas que el flujo de creación, pero casi todas
  * presentacionales: pintan datos del PendientesStore y navegan.
@@ -34,9 +34,15 @@ import { Routes } from '@angular/router';
  * En ninguna otra pantalla del bloque.
  */
 export const MOBILE_CONSULTA_ROUTES: Routes = [
-  // {
-  //   path: 'permiso',
-  //   loadComponent: () =>
-  //     import('./pages/permiso.page').then((m) => m.PermisoPage),
-  // },
+  {
+    path: 'permiso',
+    loadComponent: () =>
+      import('./pages/permiso.page').then((m) => m.PermisoPage),
+  },
+  {
+    // MM12 y MM03 son la misma página: el estado vacío no es otra ruta.
+    path: 'pendientes',
+    loadComponent: () =>
+      import('./pages/pendientes.page').then((m) => m.PendientesPage),
+  },
 ];

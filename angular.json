@@ -41,8 +41,7 @@
             "styles": [
               "src/global.scss",
               "src/theme/variables.scss",
-              "src/app/ui/tokens.css",
-              "src/app/web/styles/web-theme.scss"
+              "src/app/ui/tokens.css"
             ],
             "scripts": [],
             "browser": "src/main.ts"
@@ -99,7 +98,7 @@
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n",
           "options": {
-              "buildTarget": "memubi-app:build"
+            "buildTarget": "memubi-app:build"
           }
         },
         "test": {

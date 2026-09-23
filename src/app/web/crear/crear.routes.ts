@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 /**
- * Web · flujo de creación y edición.   DUEÑO: Joseph
+ * Web · flujo de creación y edición.   DUEÑO: Juan David
  *
  * Marcos en `s7ocVpNtQdKTUFr7CaNWMh` (*MemUBI-App*), página *Web*.
  *

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, booleanAttribute } from '@angular/core';
 
 /**
  * Botón del sistema.
@@ -30,11 +30,24 @@ import { Component, Input } from '@angular/core';
   `,
   styles: [
     `
+      /* La altura y el ancho salen de custom properties para que cada
+       * pantalla ajuste la medida de su mockup sin que el componente
+       * sepa en qué plataforma está. El móvil usa el valor por defecto
+       * (52px, MM20); la web pide 48px desde su propio scss (MW1).
+       *
+       * Es la forma de no terminar con un @Input() variante 'web'|'movil',
+       * que sería la señal de que este componente en realidad son dos. */
       .boton {
-        min-height: 3.25rem; /* 52px · objetivo táctil holgado */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--ui-space-3);
+        min-height: var(--ui-boton-alto, 3.25rem);
+        width: var(--ui-boton-ancho, auto);
         padding: 0 var(--ui-space-6);
         border-radius: var(--ui-radius-pill);
         border: none;
+        white-space: nowrap;
         cursor: pointer;
       }
       .boton--ancho {
@@ -64,7 +77,10 @@ import { Component, Input } from '@angular/core';
 })
 export class BotonComponent {
   @Input() variante: 'primario' | 'secundario' | 'accion' = 'primario';
-  @Input() deshabilitado = false;
-  @Input() anchoCompleto = false;
+  /* `booleanAttribute` permite escribir <ui-boton anchoCompleto> sin el
+   * [x]="true". Un atributo suelto llega como cadena vacía, y sin esta
+   * transformación el compilador de plantillas lo rechaza. */
+  @Input({ transform: booleanAttribute }) deshabilitado = false;
+  @Input({ transform: booleanAttribute }) anchoCompleto = false;
   @Input() etiquetaAccesible = '';
 }

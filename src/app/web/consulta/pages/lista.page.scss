@@ -170,30 +170,10 @@ h1 {
   outline-offset: 3px;
 }
 
-.mw0-new-button[mat-flat-button] {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 12.75rem;
-  min-width: 12.75rem;
-  height: 3rem;
-  min-height: 3rem;
-  padding: 0 1.5rem;
-  border-radius: 1.5rem;
-  font: 600 1rem / 1.25rem var(--ui-font);
-  letter-spacing: 0.2px;
-  white-space: nowrap;
-}
-
-.mw0-new-button__content {
-  position: relative;
-  top: 0.125rem;
-  left: 0.6875rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  width: 9.875rem;
-  height: 1.25rem;
+.mw0-new-button {
+  /* MW1 pide 48px de alto; el primitivo trae 52 por defecto. */
+  --ui-boton-alto: 3rem;
+  --ui-boton-ancho: 12.75rem;
 }
 
 .mw0-empty-card {
@@ -307,9 +287,12 @@ h1 {
     align-items: stretch;
   }
 
-  .mw0-view-switch,
-  .mw0-new-button[mat-flat-button] {
+  .mw0-view-switch {
     width: 100%;
+  }
+
+  .mw0-new-button {
+    --ui-boton-ancho: 100%;
   }
 
   .mw0-empty-card {

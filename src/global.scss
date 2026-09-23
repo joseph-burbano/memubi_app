@@ -1,3 +1,11 @@
+/* Inter empaquetada como recurso.
+ * No viene con el sistema: si no se embebe, Android cae a Roboto y se
+ * pierde la razon por la que se eligio (altura de x mayor, cifras
+ * tabulares). Va aqui y no en un scss de web porque movil tambien la usa. */
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------

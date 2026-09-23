@@ -9,16 +9,15 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "build:movil": "ng build && npx cap sync android"
+    "apk": "ng build && cap sync android && node scripts/apk.mjs",
+    "apk:run": "npm run apk && adb install -r android/app/build/outputs/apk/debug/app-debug.apk && adb shell am start -n co.edu.uniandes.miso.memubi/.MainActivity"
   },
   "private": true,
   "dependencies": {
-    "@angular/cdk": "^22.1.7",
     "@angular/common": "22.1.7",
     "@angular/compiler": "22.1.7",
     "@angular/core": "22.1.7",
     "@angular/forms": "22.1.7",
-    "@angular/material": "^22.1.7",
     "@angular/platform-browser": "22.1.7",
     "@angular/router": "22.1.7",
     "@capacitor/android": "^7.0.0",
@@ -47,5 +46,8 @@
     "typescript-eslint": "^8.61.0",
     "vitest": "~4.0.18"
   },
-  "description": "MemUbi - prototipo no funcional de las interfaces web y movil"
+  "description": "MemUbi - prototipo no funcional de las interfaces web y movil",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  }
 }
