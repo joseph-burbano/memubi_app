@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 /**
- * Móvil · flujo de creación y edición.   DUEÑO: Juan David
+ * Móvil · flujo de creación y edición.   DUEÑO: Joseph
  *
  * El asistente: cinco pantallas encadenadas escribiendo sobre el mismo
  * BorradorStore. Es la pieza más pesada del proyecto.
