@@ -1,6 +1,5 @@
 import { Categoria } from '../models/categoria.model';
 import { Coordenada, Lugar } from '../models/lugar.model';
-import { RadioAviso } from '../models/radio.model';
 
 /**
  * La puerta al GPS. El otro punto de contacto con el mundo exterior.
@@ -29,9 +28,18 @@ import { RadioAviso } from '../models/radio.model';
  */
 export abstract class LocationService {
   abstract posicionActual(): Promise<Coordenada>;
-  /** Candidatos de esa categoría que caen dentro del radio. */
-  abstract lugaresCercanos(
-    categoria: Categoria,
-    radio: RadioAviso,
-  ): Promise<Lugar[]>;
+
+  /**
+   * TODOS los lugares cercanos de esa categoría, dentro y fuera del
+   * radio.
+   *
+   * No filtra por radio a propósito. El mapa de MW2 dibuja los dos:
+   * rellenos los que activarían el aviso y huecos los que no, con su
+   * leyenda "Activa el aviso / Fuera del radio". Si el servicio filtrara,
+   * nunca habría ninguno fuera y esa leyenda no tendría sentido.
+   *
+   * Decidir qué cae dentro es mirar `distanciaMetros` contra el radio
+   * elegido, y eso es una decisión de presentación.
+   */
+  abstract lugaresCercanos(categoria: Categoria): Promise<Lugar[]>;
 }

@@ -31,6 +31,27 @@ export const LUGARES_MOCK: Record<Categoria, readonly Lugar[]> = {
 };
 
 /**
+ * Direcciones candidatas para la rama DIRECCIÓN de MW2b.
+ *
+ * Son las del mockup. A diferencia de los candidatos por categoría,
+ * estas SÍ se eligen: el pendiente se ata a una dirección concreta.
+ */
+export const DIRECCIONES_MOCK: readonly Lugar[] = [
+  {
+    id: 'd1',
+    nombre: 'Farmacia',
+    direccion: 'Calle de Alcalá 45, Madrid',
+    distanciaMetros: 300,
+  },
+  {
+    id: 'd2',
+    nombre: 'Farmacia',
+    direccion: 'Calle de Alcalá 128, Madrid',
+    distanciaMetros: 1100,
+  },
+];
+
+/**
  * Elegidas para que el radio se note al cambiarlo en MW2h / MW2i:
  * con 200 m entra un supermercado, con 500 m entran dos, con 1 km tres.
  * Si cambias las distancias, esa demostración deja de funcionar.
