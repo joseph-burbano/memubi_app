@@ -59,9 +59,27 @@ export const MOBILE_CONSULTA_ROUTES: Routes = [
       import('./pages/alerta.page').then((m) => m.AlertaPage),
   },
   {
-    // MM21
+    // MM21. `data` alimenta el input `desenlace` gracias a
+    // withComponentInputBinding(): el desenlace es parte del recorrido,
+    // no algo que el usuario escriba en la URL.
     path: 'realizado/:id',
+    data: { desenlace: 'realizado' },
     loadComponent: () =>
-      import('./pages/realizado.page').then((m) => m.RealizadoPage),
+      import('./pages/desenlace.page').then((m) => m.DesenlacePage),
+  },
+  {
+    // MM22. Misma página que MM21, otro desenlace.
+    path: 'proximo-lugar/:id',
+    data: { desenlace: 'sigue-activo' },
+    loadComponent: () =>
+      import('./pages/desenlace.page').then((m) => m.DesenlacePage),
+  },
+  {
+    // MM24 y MM24b: el interruptor es un estado, no otra pantalla.
+    path: 'privacidad/ubicacion',
+    loadComponent: () =>
+      import('./pages/privacidad-ubicacion.page').then(
+        (m) => m.PrivacidadUbicacionPage,
+      ),
   },
 ];

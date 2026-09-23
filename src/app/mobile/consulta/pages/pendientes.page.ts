@@ -6,8 +6,23 @@ import { BarraAccionesComponent } from '../ui/barra-acciones';
 import { PendienteCardMobileComponent } from '../ui/pendiente-card.mobile';
 import { PendientesStore } from '../../../core/store/pendientes.store';
 
+const LETRAS = [
+  'cero', 'uno', 'dos', 'tres', 'cuatro',
+  'cinco', 'seis', 'siete', 'ocho', 'nueve',
+];
+
+/** Más allá de nueve vuelve a la cifra: "doce" empieza a estorbar. */
+function enLetra(n: number): string {
+  return LETRAS[n] ?? String(n);
+}
+
+function mayuscula(texto: string): string {
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
 /**
- * Mis pendientes. `MM12`, y `MM03` cuando la lista está vacía.
+ * Mis pendientes. `MM12`, `MM03` cuando está vacía y `MM13` cuando hay
+ * alguno completado.
  *
  * UNA PÁGINA, DOS ESTADOS. Son dos marcos en Figma, pero comparten
  * barra superior, título, barra inferior y hasta el mismo `h1`: lo único
@@ -61,7 +76,11 @@ import { PendientesStore } from '../../../core/store/pendientes.store';
           <ul class="lista__items">
             @for (pendiente of store.pendientes(); track pendiente.id) {
               <li>
-                <mob-pendiente-card [pendiente]="pendiente" (abrir)="abrir($event)" />
+                <mob-pendiente-card
+                  [pendiente]="pendiente"
+                  (abrir)="abrir($event)"
+                  (dispararAlerta)="dispararAlerta($event)"
+                />
               </li>
             }
           </ul>
@@ -144,8 +163,31 @@ export class PendientesPage implements OnInit {
     void this.router.navigate(['/pendientes', id]);
   }
 
+  /**
+   * "Tres pendientes activos." (MM12) · "Dos activos y uno completado." (MM13)
+   *
+   * Los mockups escriben los números con letra, no con cifra. No es
+   * capricho: con este público un "3" suelto se lee peor que "tres".
+   */
+  /**
+   * Atajo de DEMOSTRACIÓN: mantener pulsada una tarjeta abre su alerta.
+   * En el producto real la dispara una geocerca del sistema operativo.
+   */
+  dispararAlerta(id: string): void {
+    void this.router.navigate(['/alerta', id]);
+  }
+
   subtitulo(): string {
-    const n = this.store.activos().length;
-    return n === 1 ? 'Un pendiente activo.' : `${n} pendientes activos.`;
+    const activos = this.store.activos().length;
+    const hechos = this.store.pendientes().length - activos;
+
+    if (hechos === 0) {
+      return activos === 1
+        ? 'Un pendiente activo.'
+        : `${mayuscula(enLetra(activos))} pendientes activos.`;
+    }
+    const a = activos === 1 ? 'uno activo' : `${enLetra(activos)} activos`;
+    const c = hechos === 1 ? 'uno completado' : `${enLetra(hechos)} completados`;
+    return `${mayuscula(a)} y ${c}.`;
   }
 }

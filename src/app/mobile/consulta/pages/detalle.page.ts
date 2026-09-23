@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, OnInit, computed, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { BarraSuperiorComponent } from '../../ui/barra-superior';
 import { BotonComponent } from '../../../ui/boton';
@@ -162,12 +162,17 @@ import { RADIOS } from '../../../core/models/radio.model';
     `,
   ],
 })
-export class DetallePage {
+export class DetallePage implements OnInit {
   private readonly store = inject(PendientesStore);
   private readonly router = inject(Router);
 
   /** Vienen del router: `withComponentInputBinding()` los enlaza solo. */
   readonly id = input.required<string>();
+
+  /** Se puede aterrizar aquí sin pasar por la lista. */
+  ngOnInit(): void {
+    void this.store.asegurarCargado();
+  }
   readonly desde = input<string>('');
 
   readonly desdeAlerta = computed(() => this.desde() === 'alerta');

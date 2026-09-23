@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, OnInit, computed, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { BarraSuperiorComponent } from '../../ui/barra-superior';
 import { AnillosProximidadComponent } from '../../ui/anillos-proximidad';
@@ -35,16 +35,16 @@ import { nombreCategoria } from '../../../core/models/categoria.model';
         <main class="alerta">
           <section class="aviso">
             <div class="aviso__ilustracion">
-              <mob-anillos-proximidad [tamano]="120" />
+              <mob-anillos-proximidad [tamano]="120" alerta />
             </div>
             <p class="ui-overline aviso__rotulo">Tienes un pendiente cerca</p>
             <h2 class="aviso__titulo">{{ p.titulo }}</h2>
             <p class="aviso__lugar">{{ contexto() }}</p>
           </section>
 
-          <p class="alerta__pregunta">¿Qué quieres hacer con este pendiente?</p>
-
           <div class="alerta__acciones">
+            <p class="alerta__pregunta">¿Qué quieres hacer con este pendiente?</p>
+
             <ui-boton variante="accion" anchoCompleto (click)="marcarRealizado()">
               Marcar como realizado
             </ui-boton>
@@ -109,7 +109,7 @@ import { nombreCategoria } from '../../../core/models/categoria.model';
         color: var(--ui-text-on-action);
       }
       .alerta__pregunta {
-        margin: 2rem 0 0;
+        margin: 0 0 1.5rem;
         font: 400 var(--ui-body-size) / var(--ui-body-line) var(--ui-font);
         color: var(--ui-text-secondary);
         text-align: center;
@@ -138,11 +138,16 @@ import { nombreCategoria } from '../../../core/models/categoria.model';
     `,
   ],
 })
-export class AlertaPage {
+export class AlertaPage implements OnInit {
   private readonly store = inject(PendientesStore);
   private readonly router = inject(Router);
 
   readonly id = input.required<string>();
+
+  /** Se puede aterrizar aquí sin pasar por la lista. */
+  ngOnInit(): void {
+    void this.store.asegurarCargado();
+  }
 
   readonly pendiente = computed(() => this.store.porId(this.id()));
 

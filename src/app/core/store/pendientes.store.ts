@@ -38,6 +38,20 @@ export class PendientesStore {
     () => !this._cargando() && this._pendientes().length === 0,
   );
 
+  /**
+   * Carga solo si aún no hay nada.
+   *
+   * Sin esto, aterrizar directo en /pendientes/:id o /alerta/:id —por un
+   * enlace, por la pulsación larga o tras recargar— deja la señal vacía
+   * y la pantalla sale en blanco. La lista era la única que llamaba a
+   * `cargar()`, así que el resto dependía de haber pasado por ella.
+   */
+  async asegurarCargado(): Promise<void> {
+    if (this._pendientes().length === 0 && !this._cargando()) {
+      await this.cargar();
+    }
+  }
+
   async cargar(): Promise<void> {
     this._cargando.set(true);
     try {
