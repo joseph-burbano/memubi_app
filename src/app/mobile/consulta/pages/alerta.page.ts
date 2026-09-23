@@ -72,7 +72,8 @@ import { nombreCategoria } from '../../../core/models/categoria.model';
         display: flex;
         flex-direction: column;
         min-height: 100dvh;
-        background: var(--ui-surface-alt);
+        /* Transparente para que se vea la textura del fondo. */
+        background: transparent;
       }
       .alerta {
         display: flex;
@@ -108,17 +109,26 @@ import { nombreCategoria } from '../../../core/models/categoria.model';
         font: 400 var(--ui-body-size) / var(--ui-body-line) var(--ui-font);
         color: var(--ui-text-on-action);
       }
+      /* Medidas tomadas de MM20, restando los 48px de la barra de
+       * sistema simulada. La pantalla del dispositivo mide 360x800 CSS,
+       * igual que el marco, así que las distancias se trasladan tal cual:
+       *   tarjeta 84-364 · pregunta 392 · botón 468
+       */
       .alerta__pregunta {
-        margin: 0 0 1.5rem;
+        margin: 1.75rem 0 3.125rem;
         font: 400 var(--ui-body-size) / var(--ui-body-line) var(--ui-font);
         color: var(--ui-text-secondary);
         text-align: center;
       }
-      /* Empuja las acciones al pie sin fijarlas: con la letra del sistema
-       * al máximo la pantalla hace scroll en vez de recortarse. */
+      /* SIN margin-top: auto. En el mockup la tarjeta, la pregunta y los
+       * botones van juntos arriba y el espacio sobrante queda debajo;
+       * empujarlos al pie los separaba de la alerta.
+       *
+       * Al no fijarlos, si el usuario sube el tamaño de letra del sistema
+       * el contenido crece hacia abajo y la pantalla hace scroll en vez
+       * de recortarse. */
       .alerta__acciones {
-        margin-top: auto;
-        padding-top: 2rem;
+        padding-top: 0;
       }
       .alerta__secundario {
         display: block;

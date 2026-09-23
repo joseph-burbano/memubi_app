@@ -13,12 +13,18 @@ import { Pendiente } from '../../../core/models/pendiente.model';
  * no muestre "Prueba 1" al lado de "Comprar leche".
  */
 const SEMILLAS: ReadonlyArray<Omit<Pendiente, 'id' | 'estado'>> = [
+  // Los tres primeros son EXACTAMENTE los de MM12: tres toques y la
+  // pantalla queda igual que el mockup.
+  { titulo: 'Comprar leche', tipoUbicacion: 'categoria', categoria: 'supermercado', radioAviso: 500 },
+  { titulo: 'Recoger medicamento', tipoUbicacion: 'direccion', direccion: 'Farmacia cerca de Calle de Alcalá', radioAviso: 500 },
+  { titulo: 'Cambiar las cuerdas del cello', tipoUbicacion: 'direccion', direccion: 'Una dirección específica', radioAviso: 500 },
+  // De aquí en adelante, para seguir poblando la lista.
+  { titulo: 'Comprar pan', tipoUbicacion: 'direccion', direccion: 'Panadería del barrio', radioAviso: 500 },
   { titulo: 'Comprar pilas', tipoUbicacion: 'categoria', categoria: 'ferreteria', radioAviso: 500 },
   { titulo: 'Recoger la receta', tipoUbicacion: 'categoria', categoria: 'farmacia', radioAviso: 200 },
   { titulo: 'Comprar café', tipoUbicacion: 'categoria', categoria: 'supermercado', radioAviso: 1000 },
   { titulo: 'Cambiar el regalo', tipoUbicacion: 'categoria', categoria: 'centro-comercial', radioAviso: 1000 },
   { titulo: 'Pasar por la tintorería', tipoUbicacion: 'direccion', direccion: 'Calle Mayor 12, Madrid', radioAviso: 200 },
-  { titulo: 'Devolver el libro', tipoUbicacion: 'direccion', direccion: 'Gran Vía 28, Madrid', radioAviso: 500 },
 ];
 
 const LETRAS = [
@@ -111,7 +117,8 @@ function mayuscula(texto: string): string {
         display: flex;
         flex-direction: column;
         height: 100dvh;
-        background: var(--ui-surface-alt);
+        /* Transparente para que se vea la textura del fondo. */
+        background: transparent;
       }
       .lista {
         flex: 1;
@@ -196,8 +203,10 @@ export class PendientesPage implements OnInit {
    * demostración desde cero.
    */
   async crearDePrueba(): Promise<void> {
-    const semilla = SEMILLAS[Math.floor(Math.random() * SEMILLAS.length)];
-    await this.store.guardar(semilla);
+    // En orden y no al azar: así la demostración es repetible y los tres
+    // primeros toques reproducen MM12 tal cual.
+    const i = this.store.pendientes().length % SEMILLAS.length;
+    await this.store.guardar(SEMILLAS[i]);
   }
 
   /**

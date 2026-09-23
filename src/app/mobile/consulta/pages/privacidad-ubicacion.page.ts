@@ -71,7 +71,8 @@ import { InterruptorComponent } from '../../../ui/interruptor';
         display: flex;
         flex-direction: column;
         min-height: 100dvh;
-        background: var(--ui-surface-alt);
+        /* Transparente para que se vea la textura del fondo. */
+        background: transparent;
       }
       .privacidad {
         flex: 1;
@@ -106,7 +107,8 @@ import { InterruptorComponent } from '../../../ui/interruptor';
         color: var(--ui-text-secondary);
       }
       .aviso {
-        margin: 1.25rem 0;
+        /* MM24: 20px sobre el aviso, 28px bajo él. */
+        margin: 1.25rem 0 1.75rem;
         font: 400 var(--ui-caption-size) / var(--ui-caption-line) var(--ui-font);
         letter-spacing: var(--ui-caption-track);
         color: var(--ui-text-secondary);

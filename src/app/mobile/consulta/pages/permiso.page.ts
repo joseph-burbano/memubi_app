@@ -67,14 +67,19 @@ import { BotonComponent } from '../../../ui/boton';
         display: flex;
         flex-direction: column;
         min-height: 100dvh;
-        background: var(--ui-surface-alt);
+        /* Transparente para que se vea la textura del fondo. */
+        background: transparent;
       }
       .permiso {
         display: flex;
         flex-direction: column;
         flex: 1;
         padding: 0 1.25rem;
-        padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+        /* 68px de aire bajo "Ahora no": es lo que deja MM01 (el enlace
+         * termina en 628 de 696 de área de contenido). Con el pie más
+         * alto, empujar con margin-top:auto cae justo donde el mockup,
+         * y en pantallas más altas o más bajas sigue comportándose. */
+        padding-bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px));
       }
       .permiso__ilustracion {
         display: flex;
@@ -99,9 +104,6 @@ import { BotonComponent } from '../../../ui/boton';
         letter-spacing: var(--ui-caption-track);
         color: var(--ui-text-secondary);
       }
-      /* Empuja las acciones al pie sin fijarlas: si el usuario sube el
-       * tamaño de letra del sistema, el texto crece y la pantalla hace
-       * scroll en vez de recortarse. */
       .permiso__acciones {
         margin-top: auto;
         padding-top: 2rem;

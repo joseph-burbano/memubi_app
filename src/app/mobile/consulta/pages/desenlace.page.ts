@@ -62,14 +62,17 @@ export type Desenlace = 'realizado' | 'sigue-activo';
         display: flex;
         flex-direction: column;
         min-height: 100dvh;
-        background: var(--ui-surface-alt);
+        /* Transparente para que se vea la textura del fondo. */
+        background: transparent;
       }
       .desenlace {
         display: flex;
         flex-direction: column;
         flex: 1;
         padding: 0 1.25rem;
-        padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+        /* 48px de aire bajo el botón: en MM21 termina en 648 de 696, no
+         * pegado al borde. */
+        padding-bottom: calc(3rem + env(safe-area-inset-bottom, 0px));
         text-align: center;
       }
       .desenlace__ilustracion {

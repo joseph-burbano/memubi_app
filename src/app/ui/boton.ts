@@ -15,6 +15,7 @@ import { Component, Input, booleanAttribute } from '@angular/core';
 @Component({
   selector: 'ui-boton',
   standalone: true,
+  host: { '[class.ui-boton--ancho]': 'anchoCompleto' },
   template: `
     <button
       class="boton ui-label-button"
@@ -30,6 +31,17 @@ import { Component, Input, booleanAttribute } from '@angular/core';
   `,
   styles: [
     `
+      /* Un custom element es INLINE por defecto, así que el width:100%
+       * del botón interno se resolvía contra una caja que se encoge al
+       * contenido: el botón salía angosto y pegado a la izquierda en vez
+       * de ocupar el ancho. El anfitrión tiene que crecer también. */
+      :host {
+        display: inline-block;
+      }
+      :host(.ui-boton--ancho) {
+        display: block;
+        width: 100%;
+      }
       /* La altura y el ancho salen de custom properties para que cada
        * pantalla ajuste la medida de su mockup sin que el componente
        * sepa en qué plataforma está. El móvil usa el valor por defecto

@@ -73,7 +73,8 @@ import { BarraSuperiorComponent } from '../../ui/barra-superior';
         display: flex;
         flex-direction: column;
         min-height: 100dvh;
-        background: var(--ui-surface-alt);
+        /* Transparente para que se vea la textura del fondo. */
+        background: transparent;
       }
       .datos {
         flex: 1;

@@ -162,6 +162,11 @@ export class PendienteCardMobileComponent {
   private fueLarga = false;
 
   iniciarPulsacion(): void {
+    // Un pendiente ya completado NO vuelve a avisar. Sin este guardia,
+    // mantenerlo pulsado abría su alerta y desde ahí se podía marcar de
+    // nuevo, que es como revivirlo.
+    if (this.completado) return;
+
     this.fueLarga = false;
     this.temporizador = setTimeout(() => {
       this.fueLarga = true;

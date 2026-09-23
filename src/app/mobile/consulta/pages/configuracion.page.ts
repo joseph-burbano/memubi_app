@@ -56,7 +56,8 @@ import { BarraSuperiorComponent } from '../../ui/barra-superior';
         display: flex;
         flex-direction: column;
         min-height: 100dvh;
-        background: var(--ui-surface-alt);
+        /* Transparente para que se vea la textura del fondo. */
+        background: transparent;
       }
       .configuracion {
         flex: 1;
@@ -72,7 +73,8 @@ import { BarraSuperiorComponent } from '../../ui/barra-superior';
       .opciones {
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
+        /* MM23: 20px entre tarjetas, no 12. */
+        gap: 1.25rem;
       }
       .opcion {
         display: flex;

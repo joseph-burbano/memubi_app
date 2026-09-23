@@ -93,7 +93,8 @@ import { RADIOS } from '../../../core/models/radio.model';
         display: flex;
         flex-direction: column;
         height: 100dvh;
-        background: var(--ui-surface-alt);
+        /* Transparente para que se vea la textura del fondo. */
+        background: transparent;
       }
       .detalle {
         flex: 1;
