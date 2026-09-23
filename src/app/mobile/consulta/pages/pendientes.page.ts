@@ -5,6 +5,21 @@ import { AnillosProximidadComponent } from '../../ui/anillos-proximidad';
 import { BarraAccionesComponent } from '../ui/barra-acciones';
 import { PendienteCardMobileComponent } from '../ui/pendiente-card.mobile';
 import { PendientesStore } from '../../../core/store/pendientes.store';
+import { Pendiente } from '../../../core/models/pendiente.model';
+
+/**
+ * Semillas para el andamio de creación. Salen del vocabulario del
+ * producto —categorías reales, direcciones de Madrid— para que la demo
+ * no muestre "Prueba 1" al lado de "Comprar leche".
+ */
+const SEMILLAS: ReadonlyArray<Omit<Pendiente, 'id' | 'estado'>> = [
+  { titulo: 'Comprar pilas', tipoUbicacion: 'categoria', categoria: 'ferreteria', radioAviso: 500 },
+  { titulo: 'Recoger la receta', tipoUbicacion: 'categoria', categoria: 'farmacia', radioAviso: 200 },
+  { titulo: 'Comprar café', tipoUbicacion: 'categoria', categoria: 'supermercado', radioAviso: 1000 },
+  { titulo: 'Cambiar el regalo', tipoUbicacion: 'categoria', categoria: 'centro-comercial', radioAviso: 1000 },
+  { titulo: 'Pasar por la tintorería', tipoUbicacion: 'direccion', direccion: 'Calle Mayor 12, Madrid', radioAviso: 200 },
+  { titulo: 'Devolver el libro', tipoUbicacion: 'direccion', direccion: 'Gran Vía 28, Madrid', radioAviso: 500 },
+];
 
 const LETRAS = [
   'cero', 'uno', 'dos', 'tres', 'cuatro',
@@ -87,7 +102,7 @@ function mayuscula(texto: string): string {
         }
       </main>
 
-      <mob-barra-acciones />
+      <mob-barra-acciones (crear)="crearDePrueba()" />
     </div>
   `,
   styles: [
@@ -169,6 +184,22 @@ export class PendientesPage implements OnInit {
    * Los mockups escriben los números con letra, no con cifra. No es
    * capricho: con este público un "3" suelto se lee peor que "tres".
    */
+  /**
+   * ANDAMIO TEMPORAL — lo reemplaza el asistente de Joseph (MM04→MM11).
+   *
+   * Crea un pendiente de mentira para poder ver cómo crece el listado.
+   * Escribe por el mismo camino que usará el asistente real —el store y
+   * de ahí el repositorio—, así que lo que se demuestra aquí no es un
+   * truco de pantalla: es el backmock funcionando.
+   *
+   * Al cerrar la app se pierde, que es lo que se quiere para repetir la
+   * demostración desde cero.
+   */
+  async crearDePrueba(): Promise<void> {
+    const semilla = SEMILLAS[Math.floor(Math.random() * SEMILLAS.length)];
+    await this.store.guardar(semilla);
+  }
+
   /**
    * Atajo de DEMOSTRACIÓN: mantener pulsada una tarjeta abre su alerta.
    * En el producto real la dispara una geocerca del sistema operativo.

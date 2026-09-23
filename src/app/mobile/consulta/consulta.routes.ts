@@ -75,6 +75,18 @@ export const MOBILE_CONSULTA_ROUTES: Routes = [
       import('./pages/desenlace.page').then((m) => m.DesenlacePage),
   },
   {
+    // MM23
+    path: 'configuracion',
+    loadComponent: () =>
+      import('./pages/configuracion.page').then((m) => m.ConfiguracionPage),
+  },
+  {
+    // MM25
+    path: 'privacidad/datos',
+    loadComponent: () =>
+      import('./pages/privacidad-datos.page').then((m) => m.PrivacidadDatosPage),
+  },
+  {
     // MM24 y MM24b: el interruptor es un estado, no otra pantalla.
     path: 'privacidad/ubicacion',
     loadComponent: () =>
