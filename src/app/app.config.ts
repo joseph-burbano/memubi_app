@@ -1,5 +1,13 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { ApplicationConfig } from '@angular/core';
+import {
+  PreloadAllModules,
+  RouteReuseStrategy,
+  provideRouter,
+  withComponentInputBinding,
+  withPreloading,
+} from '@angular/router';
+import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular';
+
 import { routes } from './app.routes';
 
 import { PendientesRepository } from './core/data/pendientes.repository';
@@ -23,11 +31,21 @@ import { LocationServiceMock } from './core/data/location.service.mock';
  *
  * Dos líneas, y ni una pantalla cambia. Cuando en la sustentación
  * pregunten cómo se conectaría esto, la respuesta es abrir este archivo.
+ *
+ * La aplicación es ZONELESS: no hay `zone.js` ni polyfills. El estado
+ * vive en señales y Angular reacciona a ellas. NO agregues
+ * `provideZoneChangeDetection`: exige una dependencia que no está
+ * instalada y rompe el arranque.
  */
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    provideIonicAngular(),
+    provideRouter(
+      routes,
+      withPreloading(PreloadAllModules),
+      withComponentInputBinding(),
+    ),
 
     // --- Datos: mockeados en esta entrega ---
     { provide: PendientesRepository, useClass: PendientesRepositoryMock },
