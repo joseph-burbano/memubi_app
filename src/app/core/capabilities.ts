@@ -52,12 +52,23 @@ export const CAPACIDADES = {
   },
 
   // --- Solo web ---
-  radioAviso: {
+  /**
+   * OJO: esto es EDITAR el radio, no verlo.
+   *
+   * Corregido el 23/09 contra los mockups: MM14, MM15 y MM20b SÍ muestran
+   * "RADIO DE AVISO · 500 m · a un par de calles". La Entrega 3 lo dejó
+   * anotado como pendiente ("si el pendiente guarda un radio, MOB-08
+   * debería mostrarlo") y en los mockups se resolvió.
+   *
+   * Lo que sigue siendo exclusivo de web es elegirlo: en móvil no hay
+   * ninguna pantalla donde se cambie.
+   */
+  editarRadioAviso: {
     movil: false,
     web: true,
     porque:
-      'Ampliación aprobada en la Entrega 3. El móvil no se tocó porque el tutor ' +
-      'validó su enfoque. El campo existe en el modelo; el móvil lo hereda',
+      'Ampliación aprobada en la Entrega 3. El móvil MUESTRA el radio en el ' +
+      'detalle, pero no tiene pantalla para cambiarlo',
   },
   mapaConRadio: {
     movil: false,

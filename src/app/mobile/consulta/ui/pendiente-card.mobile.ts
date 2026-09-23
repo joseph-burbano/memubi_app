@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ChipComponent } from '../../../ui/chip';
 import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.model';
 
@@ -24,7 +24,7 @@ import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.mo
   standalone: true,
   imports: [ChipComponent],
   template: `
-    <button class="tarjeta" type="button">
+    <button class="tarjeta" type="button" (click)="abrir.emit(pendiente.id)">
       <span class="tarjeta__marca" aria-hidden="true">
         <span class="tarjeta__anillo"></span>
         <span class="tarjeta__punto"></span>
@@ -105,6 +105,9 @@ import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.mo
 })
 export class PendienteCardMobileComponent {
   @Input({ required: true }) pendiente!: Pendiente;
+
+  /** La tarjeta entera navega al detalle: MM12 -> MM14 / MM15. */
+  @Output() abrir = new EventEmitter<string>();
 
   get ubicacion(): string {
     return describirUbicacion(this.pendiente);

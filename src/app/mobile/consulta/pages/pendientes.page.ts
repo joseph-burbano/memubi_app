@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { BarraSuperiorComponent } from '../../ui/barra-superior';
 import { AnillosProximidadComponent } from '../../ui/anillos-proximidad';
 import { BarraAccionesComponent } from '../ui/barra-acciones';
@@ -60,7 +61,7 @@ import { PendientesStore } from '../../../core/store/pendientes.store';
           <ul class="lista__items">
             @for (pendiente of store.pendientes(); track pendiente.id) {
               <li>
-                <mob-pendiente-card [pendiente]="pendiente" />
+                <mob-pendiente-card [pendiente]="pendiente" (abrir)="abrir($event)" />
               </li>
             }
           </ul>
@@ -132,9 +133,15 @@ import { PendientesStore } from '../../../core/store/pendientes.store';
 })
 export class PendientesPage implements OnInit {
   readonly store = inject(PendientesStore);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     void this.store.cargar();
+  }
+
+  /** MM12 -> MM14 (categoría) o MM15 (dirección), según el pendiente. */
+  abrir(id: string): void {
+    void this.router.navigate(['/pendientes', id]);
   }
 
   subtitulo(): string {

@@ -45,4 +45,23 @@ export const MOBILE_CONSULTA_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/pendientes.page').then((m) => m.PendientesPage),
   },
+  {
+    // MM14, MM15 y MM20b. La rama sale del pendiente; el origen, de
+    // ?desde=alerta, que solo cambia la barra de acciones.
+    path: 'pendientes/:id',
+    loadComponent: () =>
+      import('./pages/detalle.page').then((m) => m.DetallePage),
+  },
+  {
+    // MM20. No se dispara por GPS: se llega porque la ruta lleva aquí.
+    path: 'alerta/:id',
+    loadComponent: () =>
+      import('./pages/alerta.page').then((m) => m.AlertaPage),
+  },
+  {
+    // MM21
+    path: 'realizado/:id',
+    loadComponent: () =>
+      import('./pages/realizado.page').then((m) => m.RealizadoPage),
+  },
 ];
