@@ -15,11 +15,12 @@ import { Routes } from '@angular/router';
  * Descomenta cada ruta cuando su página exista.
  *
  *   P1 · Red Route
+ *   [x] pendientes             MW0 · estado vacío de lista
  *   [ ] pendientes             MW1 · MW1b · MW1d · MW1e
  *   [ ] pendientes/:id         MW4 · MW4b     detalle categoría / dirección
  *
  *   P2
- *   [ ] sin-pendientes         MW0 · MW0b     estado vacío, lista y mapa
+ *   [ ] estado vacío de mapa   MW0b           en la misma ruta /pendientes
  *   [ ] privacidad             MW6            privacidad y datos
  *   [ ] uso-ubicacion          MW7            uso de la ubicación
  *
@@ -31,9 +32,10 @@ import { Routes } from '@angular/router';
  * Ninguna lista muestra la distancia. No la agregues: no está prototipada.
  */
 export const WEB_CONSULTA_ROUTES: Routes = [
-  // {
-  //   path: 'pendientes',
-  //   loadComponent: () =>
-  //     import('./pages/lista.page').then((m) => m.ListaPage),
-  // },
+  {
+    path: 'pendientes',
+    title: 'MemUbi · Mis pendientes',
+    loadComponent: () =>
+      import('./pages/lista.page').then((m) => m.ListaPage),
+  },
 ];

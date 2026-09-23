@@ -31,12 +31,18 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/app/web/assets",
+                "output": "assets/web"
               }
             ],
             "styles": [
               "src/global.scss",
               "src/theme/variables.scss",
-              "src/app/ui/tokens.css"
+              "src/app/ui/tokens.css",
+              "src/app/web/styles/web-theme.scss"
             ],
             "scripts": [],
             "browser": "src/main.ts"
@@ -51,8 +57,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
                 }
               ],
               "fileReplacements": [
@@ -79,10 +85,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "app:build:production"
+              "buildTarget": "memubi-app:build:production"
             },
             "development": {
-              "buildTarget": "app:build:development"
+              "buildTarget": "memubi-app:build:development"
             },
             "ci": {
               "progress": false
@@ -93,7 +99,7 @@
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n",
           "options": {
-            "buildTarget": "app:build"
+              "buildTarget": "memubi-app:build"
           }
         },
         "test": {
@@ -126,7 +132,8 @@
   "cli": {
     "schematicCollections": [
       "@ionic/angular-toolkit"
-    ]
+    ],
+    "analytics": "9d12cd16-ee3b-47a4-858c-062bab234e09"
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {

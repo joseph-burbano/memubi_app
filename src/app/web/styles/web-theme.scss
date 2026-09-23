@@ -1,0 +1,32 @@
+@use '@angular/material' as mat;
+
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+
+@include mat.core();
+
+.memubi-web-theme {
+  @include mat.theme((
+    color: (primary: mat.$green-palette, theme-type: light),
+    typography: (
+      plain-family: Inter,
+      brand-family: Inter,
+      regular-weight: 400,
+      medium-weight: 500,
+      bold-weight: 600,
+    ),
+    density: 0,
+  ));
+
+  @include mat.theme-overrides((
+    primary: #2a6c62,
+    on-primary: #ffffff,
+    primary-container: #f1f7f6,
+    on-primary-container: #2a6c62,
+    surface: #ffffff,
+    on-surface: #2e2b25,
+    on-surface-variant: #837d71,
+    outline: #e5e2da,
+  ));
+}

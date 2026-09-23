@@ -1,0 +1,52 @@
+<div class="mw0-page memubi-web-theme">
+  <header class="mw0-header">
+    <div class="mw0-header__inner">
+      <div class="mw0-brand" aria-label="MemUbi">
+        <span class="mw0-brand__mark" aria-hidden="true">
+          <img src="assets/web/logo-ring.svg" alt="" width="28" height="28" />
+          <img src="assets/web/logo-dot.svg" alt="" width="10" height="10" />
+        </span>
+        <span class="mw0-brand__name">MemUbi</span>
+      </div>
+
+      <nav class="mw0-nav" aria-label="Navegación principal">
+        <span class="mw0-nav__item mw0-nav__item--active" aria-current="page">Mis pendientes</span>
+        <span class="mw0-nav__item">Privacidad</span>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mw0-main">
+    <h1>Mis pendientes</h1>
+    <p class="mw0-intro">
+      Todavía no tienes pendientes. Crea el primero y te avisaremos cuando pases cerca del lugar.
+    </p>
+
+    <div class="mw0-actions">
+      <div class="mw0-view-switch" role="group" aria-label="Vista de pendientes">
+        <button type="button" class="mw0-view-switch__option mw0-view-switch__option--active" aria-pressed="true">Lista</button>
+        <button type="button" class="mw0-view-switch__option" aria-pressed="false">Mapa</button>
+      </div>
+
+      <button mat-flat-button type="button" class="mw0-new-button">
+        <span class="mw0-new-button__content">
+          <span aria-hidden="true">+</span>
+          <span>Nuevo pendiente</span>
+        </span>
+      </button>
+    </div>
+
+    <section class="mw0-empty-card" aria-labelledby="mw0-empty-title">
+      <div class="mw0-empty-card__illustration" aria-hidden="true">
+        <img src="assets/web/empty-ring-outer.svg" alt="" width="240" height="240" />
+        <img src="assets/web/empty-ring-middle.svg" alt="" width="160" height="160" />
+        <img src="assets/web/empty-ring-inner.svg" alt="" width="80" height="80" />
+        <img src="assets/web/empty-dot.svg" alt="" width="22" height="22" />
+      </div>
+      <div class="mw0-empty-card__message">
+        <h2 id="mw0-empty-title">Aquí aparecerán tus pendientes</h2>
+        <p>Cada uno se activa solo cuando pasas cerca del lugar que elijas.</p>
+      </div>
+    </section>
+  </main>
+</div>
