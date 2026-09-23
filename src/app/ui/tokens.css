@@ -1,7 +1,144 @@
+/* MemUbi · Design System
+ *
+ * Extraído de los mockups (MW1, MW2d, MM12, MM20), no inventado.
+ * Colección de Figma: `MemUbi UI Tokens`.
+ *
+ * Reglas que no se negocian en código:
+ *   - Teal dominante. Es el color del sistema.
+ *   - Ámbar RESERVADO a la alerta de proximidad y a la acción que la
+ *     resuelve. Menos del 5 % de cualquier pantalla. Si adorna, deja de avisar.
+ *   - Rojo solo destructivo, nunca alerta.
+ *   - Tamaños en rem, nunca en px: el público sube la letra del sistema.
+ *   - Misma escala tipográfica en web y en móvil.
+ */
+
 :root {
-  --color-primary: #2563eb;
-  --color-surface: #ffffff;
-  --color-text: #111827;
-  --spacing-unit: 0.25rem;
-  --radius-md: 0.5rem;
+  /* ---------- Marca ---------- */
+  --ui-brand: #2a6c62;
+  --ui-brand-subtle: #f1f7f6;
+  --ui-brand-border: #b6d9d3;
+
+  /* ---------- Acción · SOLO alerta de proximidad ---------- */
+  --ui-action: #f7aa26;
+  --ui-action-subtle: #fff8ea;
+  --ui-text-on-action: #1a1814;
+
+  /* ---------- Superficies ---------- */
+  --ui-surface: #ffffff;
+  --ui-surface-alt: #faf9f7;
+  --ui-surface-sunken: #f2f0eb;
+
+  /* ---------- Bordes ---------- */
+  --ui-border: #e5e2da;
+  --ui-border-strong: #d0cbc1;
+
+  /* ---------- Texto ---------- */
+  --ui-text-primary: #2e2b25;
+  --ui-text-secondary: #837d71;
+  --ui-text-inverse: #ffffff;
+  --ui-text-link: #2a6c62;
+  --ui-text-disabled: #aba599;
+
+  /* ---------- Estados ---------- */
+  --ui-disabled: #d0cbc1;
+
+  /* ---------- Radios ---------- */
+  --ui-radius-sm: 0.75rem;   /* 12px · campos, tarjetas pequeñas */
+  --ui-radius-md: 1rem;      /* 16px · tarjetas */
+  --ui-radius-lg: 1.25rem;   /* 20px · tarjeta de alerta */
+  --ui-radius-pill: 9999px;  /* botones, chips */
+
+  /* ---------- Espaciado · rejilla de 4 ---------- */
+  --ui-space-1: 0.25rem;
+  --ui-space-2: 0.5rem;
+  --ui-space-3: 0.75rem;
+  --ui-space-4: 1rem;
+  --ui-space-5: 1.25rem;
+  --ui-space-6: 1.5rem;
+  --ui-space-8: 2rem;
+
+  /* ---------- Tipografía ----------
+   * Inter va empaquetada como recurso. Si no se embebe, Android
+   * cae a Roboto y se pierde la razón por la que se eligió.
+   */
+  --ui-font: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --ui-h1-size: 2rem;          --ui-h1-line: 2.5rem;    --ui-h1-track: -0.6px;
+  --ui-h2-size: 1.625rem;      --ui-h2-line: 2.125rem;  --ui-h2-track: -0.4px;
+  --ui-h3-size: 1.3125rem;     --ui-h3-line: 1.75rem;   --ui-h3-track: -0.2px;
+  --ui-body-lg-size: 1.1875rem; --ui-body-lg-line: 1.75rem;
+  --ui-body-size: 1.0625rem;   --ui-body-line: 1.625rem;
+  --ui-button-size: 1rem;      --ui-button-line: 1.25rem;  --ui-button-track: 0.2px;
+  --ui-field-size: 0.9375rem;  --ui-field-line: 1.25rem;   --ui-field-track: 0.1px;
+  --ui-caption-size: 0.875rem; --ui-caption-line: 1.25rem; --ui-caption-track: 0.1px;
+  --ui-overline-size: 0.75rem; --ui-overline-line: 1rem;   --ui-overline-track: 1.2px;
+}
+
+/* Ionic consume sus propias variables. Se apuntan a las nuestras para
+ * que sus componentes hereden el sistema sin reestilarlos uno a uno. */
+:root {
+  --ion-color-primary: var(--ui-brand);
+  --ion-color-primary-contrast: var(--ui-text-inverse);
+  --ion-background-color: var(--ui-surface-alt);
+  --ion-text-color: var(--ui-text-primary);
+  --ion-border-color: var(--ui-border);
+  --ion-font-family: var(--ui-font);
+}
+
+/* ---------- Clases de texto ---------- */
+
+.ui-h1 {
+  font: 600 var(--ui-h1-size) / var(--ui-h1-line) var(--ui-font);
+  letter-spacing: var(--ui-h1-track);
+  color: var(--ui-text-primary);
+}
+
+.ui-h2 {
+  font: 600 var(--ui-h2-size) / var(--ui-h2-line) var(--ui-font);
+  letter-spacing: var(--ui-h2-track);
+  color: var(--ui-text-primary);
+}
+
+.ui-h3 {
+  font: 600 var(--ui-h3-size) / var(--ui-h3-line) var(--ui-font);
+  letter-spacing: var(--ui-h3-track);
+  color: var(--ui-text-primary);
+}
+
+/* Texto de campo de formulario */
+.ui-body-lg {
+  font: 400 var(--ui-body-lg-size) / var(--ui-body-lg-line) var(--ui-font);
+}
+
+.ui-body {
+  font: 400 var(--ui-body-size) / var(--ui-body-line) var(--ui-font);
+}
+
+.ui-body-strong {
+  font: 600 var(--ui-body-size) / var(--ui-body-line) var(--ui-font);
+}
+
+.ui-label-button {
+  font: 600 var(--ui-button-size) / var(--ui-button-line) var(--ui-font);
+  letter-spacing: var(--ui-button-track);
+}
+
+/* Etiqueta encima de un campo */
+.ui-label-field {
+  font: 500 var(--ui-field-size) / var(--ui-field-line) var(--ui-font);
+  letter-spacing: var(--ui-field-track);
+  color: var(--ui-text-secondary);
+}
+
+.ui-caption {
+  font: 400 var(--ui-caption-size) / var(--ui-caption-line) var(--ui-font);
+  letter-spacing: var(--ui-caption-track);
+  color: var(--ui-text-secondary);
+}
+
+/* Palabras que se reconocen, no se leen. Única excepción al mínimo de 14 px. */
+.ui-overline {
+  font: 600 var(--ui-overline-size) / var(--ui-overline-line) var(--ui-font);
+  letter-spacing: var(--ui-overline-track);
+  text-transform: uppercase;
 }

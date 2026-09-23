@@ -1,5 +1,76 @@
-export const capabilities = {
-  location: true,
-  reminders: true,
-  offline: true,
-} as const;
+/**
+ * Mapa de capacidades: qué funcionalidad existe en qué plataforma.
+ *
+ * NO son capacidades del dispositivo. Es la asimetría deliberada entre
+ * los dos productos, y es lo que hay que poder sustentar:
+ *
+ *   "No ocultamos funcionalidades en móvil. El dominio es uno y está
+ *    completo; cada plataforma expone lo suyo."
+ *
+ * Fíjate en que hay exclusivas en AMBAS direcciones. Web no es móvil
+ * con extras, y móvil no es web recortada.
+ */
+
+export interface Capacidad {
+  readonly movil: boolean;
+  readonly web: boolean;
+  readonly porque: string;
+}
+
+export const CAPACIDADES = {
+  listaPendientes: {
+    movil: true,
+    web: true,
+    porque: 'Núcleo del producto en las dos plataformas',
+  },
+  crearPendiente: {
+    movil: true,
+    web: true,
+    porque: 'Mismo caso de uso, distinta forma: asistente en móvil, una página en web',
+  },
+  editarPendiente: { movil: true, web: true, porque: 'Núcleo' },
+  privacidadYDatos: { movil: true, web: true, porque: 'Núcleo' },
+
+  // --- Solo móvil ---
+  alertaProximidad: {
+    movil: true,
+    web: false,
+    porque:
+      'El navegador no puede: no hay API de geofencing, navigator.geolocation ' +
+      'no se expone a los service workers y con la pestaña cerrada no corre nada. ' +
+      'El móvil es el único que va contigo en la calle',
+  },
+  permisosUbicacion: {
+    movil: true,
+    web: false,
+    porque: 'Se administran en el dispositivo, no desde la web (MW7 lo dice explícitamente)',
+  },
+  configuracion: {
+    movil: true,
+    web: false,
+    porque: 'Los ajustes viven donde llega el aviso',
+  },
+
+  // --- Solo web ---
+  radioAviso: {
+    movil: false,
+    web: true,
+    porque:
+      'Ampliación aprobada en la Entrega 3. El móvil no se tocó porque el tutor ' +
+      'validó su enfoque. El campo existe en el modelo; el móvil lo hereda',
+  },
+  mapaConRadio: {
+    movil: false,
+    web: true,
+    porque: 'Necesita ancho de pantalla para ser legible',
+  },
+  sugerirDirecciones: {
+    movil: false,
+    web: true,
+    porque:
+      'Mostrar candidatos aplica a las dos ramas; ELEGIR uno solo a la rama ' +
+      'dirección. En categoría contradiría el significado de "cualquier lugar de ese tipo"',
+  },
+} as const satisfies Record<string, Capacidad>;
+
+export type NombreCapacidad = keyof typeof CAPACIDADES;
