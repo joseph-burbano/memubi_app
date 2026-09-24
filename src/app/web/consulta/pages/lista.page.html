@@ -20,7 +20,13 @@
     <h1>Mis pendientes</h1>
     <p class="mw0-intro">
       @if (pendientes.pendientes().length > 0) {
-        Tus recordatorios activos. Los avisos por cercanía llegan a la aplicación móvil.
+        @if (vista() === 'mapa') {
+          Tus pendientes y los lugares donde podrían activarse.
+        } @else if (completados().length > 0) {
+          {{ resumenCompletados() }}
+        } @else {
+          Tus recordatorios activos. Los avisos por cercanía llegan a la aplicación móvil.
+        }
       } @else {
         Todavía no tienes pendientes. Crea el primero y te avisaremos cuando pases cerca del lugar.
       }
@@ -28,8 +34,8 @@
 
     <div class="mw0-actions">
       <div class="mw0-view-switch" role="group" aria-label="Vista de pendientes">
-        <button type="button" class="mw0-view-switch__option mw0-view-switch__option--active" aria-pressed="true">Lista</button>
-        <button type="button" class="mw0-view-switch__option" aria-pressed="false">Mapa</button>
+        <button type="button" class="mw0-view-switch__option" [class.mw0-view-switch__option--active]="vista() === 'lista' || pendientes.activos().length === 0" [attr.aria-pressed]="vista() === 'lista' || pendientes.activos().length === 0" (click)="seleccionarVista('lista')">Lista</button>
+        <button type="button" class="mw0-view-switch__option" [class.mw0-view-switch__option--active]="vista() === 'mapa' && pendientes.activos().length > 0" [attr.aria-pressed]="vista() === 'mapa' && pendientes.activos().length > 0" (click)="seleccionarVista('mapa')">Mapa</button>
       </div>
 
       <ui-boton class="mw0-new-button" variante="primario" (click)="irACrear()">
@@ -39,11 +45,15 @@
     </div>
 
     @if (pendientes.pendientes().length > 0) {
-      <section class="mw1-list" aria-label="Pendientes activos">
-        @for (pendiente of pendientes.activos(); track pendiente.id) {
-          <web-pendiente-card [pendiente]="pendiente" />
-        }
-      </section>
+      @if (vista() === 'mapa') {
+        <web-mapa-pendientes [pendientes]="pendientes.activos()" [cercanos]="cercanos()" />
+      } @else {
+        <section class="mw1-list" [attr.aria-label]="completados().length > 0 ? 'Pendientes activos y completados' : 'Pendientes activos'">
+          @for (pendiente of pendientes.pendientes(); track pendiente.id) {
+            <web-pendiente-card [pendiente]="pendiente" (cambiarEstado)="cambiarEstado($event)" />
+          }
+        </section>
+      }
     } @else {
     <section class="mw0-empty-card" aria-labelledby="mw0-empty-title">
       <div class="mw0-empty-card__illustration" aria-hidden="true">
