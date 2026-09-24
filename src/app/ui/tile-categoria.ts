@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, booleanAttribute } from '@angular/core';
 import { Categoria } from '../core/models/categoria.model';
 
 /**
@@ -23,6 +23,7 @@ import { Categoria } from '../core/models/categoria.model';
       role="radio"
       [attr.aria-checked]="seleccionada"
       [class.tile--seleccionada]="seleccionada"
+      [class.tile--movil]="cuadriculaMovil"
       [disabled]="deshabilitada"
       (click)="elegir.emit(categoria)"
     >
@@ -71,6 +72,33 @@ import { Categoria } from '../core/models/categoria.model';
         outline: 2px solid var(--ui-brand);
         outline-offset: 2px;
       }
+      .tile--movil {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--ui-space-3);
+        min-height: 8.5rem;
+        padding: var(--ui-space-4);
+        border-radius: 0.875rem;
+        font: 500 var(--ui-field-size) / var(--ui-field-line) var(--ui-font);
+      }
+      .tile--movil .tile__marca {
+        display: grid;
+        place-self: center;
+        width: 100%;
+        height: 4rem;
+        border: 0;
+        border-radius: 0.5rem;
+        background: var(--ui-surface-sunken);
+      }
+      .tile--movil .tile__marca::after {
+        content: '';
+        width: 1.75rem;
+        height: 1.75rem;
+        border: 2px solid var(--ui-border-strong);
+        border-radius: var(--ui-radius-pill);
+      }
+      .tile--movil.tile--seleccionada .tile__marca { background: var(--ui-surface-sunken); }
+      .tile--movil.tile--seleccionada .tile__marca::after { border-color: var(--ui-brand); }
     `,
   ],
 })
@@ -80,6 +108,7 @@ export class TileCategoriaComponent {
   @Input() seleccionada = false;
   /** Las categorías se activan al elegir "cualquier lugar de una categoría" (MW2d). */
   @Input() deshabilitada = false;
+  @Input({ transform: booleanAttribute }) cuadriculaMovil = false;
 
   @Output() elegir = new EventEmitter<Categoria>();
 }

@@ -37,11 +37,11 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       .campo {
         display: flex;
         flex-direction: column;
-        gap: var(--ui-space-2);
+        gap: var(--ui-campo-gap, var(--ui-space-2));
       }
       .campo__input {
-        min-height: 3.75rem; /* 60px */
-        padding: 0 var(--ui-space-6);
+        min-height: var(--ui-campo-alto, 3.75rem);
+        padding: 0 var(--ui-campo-padding, var(--ui-space-6));
         background: var(--ui-surface);
         border: 1px solid var(--ui-border);
         border-radius: var(--ui-radius-sm);

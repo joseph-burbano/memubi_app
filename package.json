@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "apk": "ng build && cap sync android && node scripts/apk.mjs",
+    "apk": "ng build && cap sync android && node scripts/sync-android-location-settings.mjs && node scripts/apk.mjs",
     "apk:run": "npm run apk && adb install -r android/app/build/outputs/apk/debug/app-debug.apk && adb shell am start -n co.edu.uniandes.miso.memubi/.MainActivity"
   },
   "private": true,
