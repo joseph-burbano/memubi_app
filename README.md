@@ -27,8 +27,13 @@ npm install
 
 # Web
 npm start
+```
 
-# Móvil
+`npm start` levanta la web en `http://localhost:4200/` con recarga en caliente.
+
+#### Móvil, por línea de comandos
+
+```bash
 npx cap add android   # solo la primera vez
 npm run apk           # genera el APK
 npm run apk:run       # genera, instala y abre en el emulador o dispositivo
@@ -38,6 +43,15 @@ El APK queda en `android/app/build/outputs/apk/debug/app-debug.apk`.
 
 > Si Gradle falla con *"does not provide the required capabilities: [JAVA_COMPILER]"*, es que `JAVA_HOME` apunta a un JRE y no a un JDK. El JDK que trae Android Studio sirve:
 > `setx JAVA_HOME "C:\Program Files\Android\Android Studio\jbr"`
+
+#### Móvil, desde Android Studio
+
+1. `npm install` y luego `npm run build` (o `npm run apk`, que además sincroniza Android) para que `android/app/src/main/assets/public` tenga la última versión compilada.
+2. `npx cap open android` abre el proyecto `android/` en Android Studio. También se puede abrir manualmente con *Open* -> carpeta `android/`.
+3. Esperar a que Gradle sincronice, elegir un emulador o un dispositivo físico conectado (con depuración USB habilitada) en la barra superior.
+4. Presionar *Run* (▶) para compilar, instalar y abrir la aplicación.
+
+Tras cambios en el código web hay que repetir `npx cap sync android` (o `npm run apk`, que ya lo hace) antes de volver a correr desde Android Studio; de lo contrario se reinstala la versión anterior.
 
 ---
 
@@ -51,7 +65,7 @@ La aplicación **arranca sin pendientes**. *Nuevo pendiente* abre el asistente d
 
 ### 2. Mantener pulsada una tarjeta dispara su alerta
 
-Mantener el dedo sobre un pendiente durante **medio segundo** abre su *alerta de proximidad*, que es lo que en el producto real ocurriría al pasar cerca del lugar. Desde ahí se puede marcar como realizado, posponerlo al próximo lugar similar o ver su detalle.
+Mantener el dedo sobre un pendiente durante **600 ms** abre su *alerta de proximidad*, que es lo que en el producto real ocurriría al pasar cerca del lugar. Desde ahí se puede marcar como realizado, posponerlo al próximo lugar similar o ver su detalle.
 
 Un pendiente ya completado no responde: un recordatorio hecho no vuelve a avisar.
 
