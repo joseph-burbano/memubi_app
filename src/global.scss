@@ -45,49 +45,18 @@
 @import '@ionic/angular/css/palettes/dark.system.css';
 
 /* ---------- Textura "radio de proximidad" ----------
- *
- * El fondo de todos los marcos del mockup, en móvil y en web. Son nueve
- * círculos concéntricos centrados en (330, 860) del marco de 360x800:
- * o sea FUERA de la pantalla, 30px a la derecha y 60px por debajo de la
- * esquina inferior. De ahí que se vean como arcos que barren la pantalla
- * desde abajo a la derecha.
- *
- * Va en CSS y no como archivo SVG a propósito: el SVG de Figma viene
- * fijo a 360x800 y se estiraría en cualquier otro alto de pantalla.
- * Anclado a la esquina, esto se comporta igual en todos los tamaños.
- *
- * Son nueve y no infinitos: pasado el noveno el mockup deja el fondo
- * limpio, y por eso el degradado termina en transparente en vez de
- * repetirse.
- */
+ * SVG exacto del marco móvil de Figma: nueve círculos concéntricos con
+ * centro en (330, 860), 54px de separación y trazo de 1.2px. Se ancla
+ * abajo a la derecha para conservar la composición en otros altos de
+ * pantalla sin que el WebView descarte paradas del degradado. */
 body,
 ion-app {
   background-color: var(--ui-surface-alt);
-  background-image: radial-gradient(
-      circle at calc(100% - 30px) calc(100% + 60px),
-      transparent 0px 52.8px,
-      var(--ui-border) 52.8px 54.0px,
-      transparent 54.0px 106.8px,
-      var(--ui-border) 106.8px 108.0px,
-      transparent 108.0px 160.8px,
-      var(--ui-border) 160.8px 162.0px,
-      transparent 162.0px 214.8px,
-      var(--ui-border) 214.8px 216.0px,
-      transparent 216.0px 268.8px,
-      var(--ui-border) 268.8px 270.0px,
-      transparent 270.0px 322.8px,
-      var(--ui-border) 322.8px 324.0px,
-      transparent 324.0px 376.8px,
-      var(--ui-border) 376.8px 378.0px,
-      transparent 378.0px 430.8px,
-      var(--ui-border) 430.8px 432.0px,
-      transparent 432.0px 484.8px,
-      var(--ui-border) 484.8px 486.0px,
-      transparent 486.0px
-    );
+  background-image: url('/assets/mobile/proximity-texture.svg');
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-size: 100% 100%;
+  background-position: right bottom;
+  background-size: 360px 800px;
 }
 
 /* `ion-app` tiene su propia superficie y cubre por completo al `body`.
