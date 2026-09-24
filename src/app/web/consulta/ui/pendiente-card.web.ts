@@ -1,29 +1,35 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.model';
 import { ChipComponent } from '../../../ui/chip';
 
-/** MW1: tarjeta web; la disposición y la navegación difieren de MM12. */
+/** MW1 y MW1d: tarjeta web; la disposición y la navegación difieren de MM12. */
 @Component({
   selector: 'web-pendiente-card',
   standalone: true,
   imports: [RouterLink, ChipComponent],
   template: `
     <article class="tarjeta">
-      <span class="tarjeta__marca" aria-hidden="true">
-        <img src="assets/web/pendiente-ring.svg" alt="" width="40" height="40" />
-        <img src="assets/web/pendiente-dot.svg" alt="" width="16" height="16" />
+      <span class="tarjeta__marca">
+        <button type="button" class="tarjeta__cambio"
+                [attr.aria-label]="(pendiente.estado === 'realizado' ? 'Reactivar ' : 'Marcar como realizado ') + pendiente.titulo"
+                (click)="cambiarEstado.emit(pendiente)">
+          <img [src]="pendiente.estado === 'realizado' ? 'assets/web/pendiente-completado-ring.svg' : 'assets/web/pendiente-ring.svg'" alt="" width="40" height="40" />
+          <img [src]="pendiente.estado === 'realizado' ? 'assets/web/pendiente-completado-dot.svg' : 'assets/web/pendiente-dot.svg'" alt="" width="16" height="16" />
+        </button>
       </span>
 
       <div class="tarjeta__contenido">
-        <h2 class="tarjeta__titulo">{{ pendiente.titulo }}</h2>
-        <p class="tarjeta__ubicacion">{{ describirUbicacion(pendiente) }}</p>
+        <h2 class="tarjeta__titulo" [class.tarjeta__titulo--completado]="pendiente.estado === 'realizado'">{{ pendiente.titulo }}</h2>
+        <p class="tarjeta__ubicacion" [class.tarjeta__ubicacion--completado]="pendiente.estado === 'realizado'">{{ describirUbicacion(pendiente) }}</p>
       </div>
 
       <a class="tarjeta__detalle" [routerLink]="['/pendientes', pendiente.id]">
         Ver detalle
       </a>
-      <ui-chip class="tarjeta__estado">Activo</ui-chip>
+      <ui-chip class="tarjeta__estado" [variante]="pendiente.estado === 'realizado' ? 'apagado' : 'activo'">
+        {{ pendiente.estado === 'realizado' ? 'Completado' : 'Activo' }}
+      </ui-chip>
     </article>
   `,
   styles: [
@@ -48,16 +54,29 @@ import { ChipComponent } from '../../../ui/chip';
         width: 2.5rem;
         height: 2.5rem;
       }
-      .tarjeta__marca img {
+      .tarjeta__cambio {
+        position: absolute;
+        top: -0.5rem;
+        left: -0.5rem;
+        width: 3.5rem;
+        height: 3.5rem;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        cursor: pointer;
+      }
+      .tarjeta__cambio img {
         position: absolute;
         display: block;
       }
-      .tarjeta__marca img:first-child {
-        inset: 0;
+      .tarjeta__cambio img:first-child {
+        top: 0.5rem;
+        left: 0.5rem;
       }
-      .tarjeta__marca img:last-child {
-        top: 0.75rem;
-        left: 0.75rem;
+      .tarjeta__cambio img:last-child {
+        top: 1.25rem;
+        left: 1.25rem;
       }
       .tarjeta__contenido {
         min-width: 0;
@@ -80,6 +99,13 @@ import { ChipComponent } from '../../../ui/chip';
         letter-spacing: var(--ui-caption-track);
         color: var(--ui-text-secondary);
       }
+      .tarjeta__titulo--completado {
+        color: var(--ui-text-disabled);
+        text-decoration: line-through;
+      }
+      .tarjeta__ubicacion--completado {
+        color: var(--ui-text-disabled);
+      }
       .tarjeta__detalle {
         font: 500 var(--ui-field-size) / var(--ui-field-line) var(--ui-font);
         letter-spacing: var(--ui-field-track);
@@ -87,7 +113,8 @@ import { ChipComponent } from '../../../ui/chip';
         text-decoration: none;
         white-space: nowrap;
       }
-      .tarjeta__detalle:focus-visible {
+      .tarjeta__detalle:focus-visible,
+      .tarjeta__cambio:focus-visible {
         outline: 2px solid var(--ui-brand);
         outline-offset: 3px;
       }
@@ -124,6 +151,7 @@ import { ChipComponent } from '../../../ui/chip';
 })
 export class PendienteCardWebComponent {
   @Input({ required: true }) pendiente!: Pendiente;
+  @Output() cambiarEstado = new EventEmitter<Pendiente>();
 
   readonly describirUbicacion = describirUbicacion;
 }
