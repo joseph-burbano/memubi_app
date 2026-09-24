@@ -19,7 +19,9 @@
   <main class="mw0-main">
     <h1>Mis pendientes</h1>
     <p class="mw0-intro">
-      @if (pendientes.pendientes().length > 0) {
+      @if (vista() === 'mapa' && pendientes.pendientes().length === 0) {
+        Todavía no tienes pendientes. Cuando crees uno, verás aquí dónde se activa.
+      } @else if (pendientes.pendientes().length > 0) {
         @if (vista() === 'mapa') {
           Tus pendientes y los lugares donde podrían activarse.
         } @else if (completados().length > 0) {
@@ -34,8 +36,8 @@
 
     <div class="mw0-actions">
       <div class="mw0-view-switch" role="group" aria-label="Vista de pendientes">
-        <button type="button" class="mw0-view-switch__option" [class.mw0-view-switch__option--active]="vista() === 'lista' || pendientes.activos().length === 0" [attr.aria-pressed]="vista() === 'lista' || pendientes.activos().length === 0" (click)="seleccionarVista('lista')">Lista</button>
-        <button type="button" class="mw0-view-switch__option" [class.mw0-view-switch__option--active]="vista() === 'mapa' && pendientes.activos().length > 0" [attr.aria-pressed]="vista() === 'mapa' && pendientes.activos().length > 0" (click)="seleccionarVista('mapa')">Mapa</button>
+        <button type="button" class="mw0-view-switch__option" [class.mw0-view-switch__option--active]="vista() === 'lista'" [attr.aria-pressed]="vista() === 'lista'" (click)="seleccionarVista('lista')">Lista</button>
+        <button type="button" class="mw0-view-switch__option" [class.mw0-view-switch__option--active]="vista() === 'mapa'" [attr.aria-pressed]="vista() === 'mapa'" (click)="seleccionarVista('mapa')">Mapa</button>
       </div>
 
       <ui-boton class="mw0-new-button" variante="primario" (click)="irACrear()">
@@ -54,6 +56,8 @@
           }
         </section>
       }
+    } @else if (vista() === 'mapa') {
+      <web-mapa-pendientes [pendientes]="[]" [cercanos]="cercanos()" />
     } @else {
     <section class="mw0-empty-card" aria-labelledby="mw0-empty-title">
       <div class="mw0-empty-card__illustration" aria-hidden="true">
