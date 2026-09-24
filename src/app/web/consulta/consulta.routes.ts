@@ -17,7 +17,7 @@ import { Routes } from '@angular/router';
  *   P1 · Red Route
  *   [x] pendientes             MW0 · estado vacío de lista
  *   [ ] pendientes             MW1 · MW1b · MW1d · MW1e
- *   [ ] pendientes/:id         MW4 · MW4b     detalle categoría / dirección
+ *   [x] pendientes/:id         MW4 · MW4b     detalle categoría / dirección
  *
  *   P2
  *   [ ] estado vacío de mapa   MW0b           en la misma ruta /pendientes
@@ -37,5 +37,11 @@ export const WEB_CONSULTA_ROUTES: Routes = [
     title: 'MemUbi · Mis pendientes',
     loadComponent: () =>
       import('./pages/lista.page').then((m) => m.ListaPage),
+  },
+  {
+    path: 'pendientes/:id',
+    title: 'MemUbi · Detalle del pendiente',
+    loadComponent: () =>
+      import('./pages/detalle.page').then((m) => m.DetallePage),
   },
 ];

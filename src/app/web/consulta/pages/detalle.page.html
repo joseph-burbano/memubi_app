@@ -1,0 +1,70 @@
+<div class="detalle-page">
+  <header class="detalle-header">
+    <div class="detalle-header__inner">
+      <div class="detalle-brand" aria-label="MemUbi">
+        <span class="detalle-brand__mark" aria-hidden="true">
+          <img src="assets/web/logo-ring.svg" alt="" width="28" height="28" />
+          <img src="assets/web/logo-dot.svg" alt="" width="10" height="10" />
+        </span>
+        <span class="detalle-brand__name">MemUbi</span>
+      </div>
+      <nav class="detalle-nav" aria-label="Navegación principal">
+        <a class="detalle-nav__item detalle-nav__item--active" routerLink="/pendientes" aria-current="page">Mis pendientes</a>
+        <span class="detalle-nav__item">Privacidad</span>
+      </nav>
+    </div>
+  </header>
+
+  @if (pendiente(); as item) {
+    <main class="detalle-main">
+      <nav class="detalle-ruta" aria-label="Ruta de navegación">
+        <a routerLink="/pendientes">Mis pendientes</a><span aria-hidden="true">›</span><span>{{ item.titulo }}</span>
+      </nav>
+      <h1>{{ item.titulo }}</h1>
+      <ui-chip class="detalle-estado" [variante]="item.estado === 'realizado' ? 'apagado' : 'activo'">
+        {{ item.estado === 'realizado' ? 'Completado' : 'Activo' }}
+      </ui-chip>
+
+      <div class="detalle-grid">
+        <div class="detalle-columna detalle-columna--datos">
+          <section class="detalle-ficha" aria-label="Datos del pendiente">
+            <div class="detalle-ficha__fila">
+              <span class="detalle-ficha__rotulo">ESTADO</span>
+              <span class="detalle-ficha__valor">{{ item.estado === 'realizado' ? 'Completado' : 'Activo' }}</span>
+            </div>
+            <div class="detalle-ficha__fila">
+              <span class="detalle-ficha__rotulo">TIPO DE UBICACIÓN</span>
+              <span class="detalle-ficha__valor">{{ tipoUbicacion(item) }}</span>
+            </div>
+            <div class="detalle-ficha__fila">
+              <span class="detalle-ficha__rotulo">{{ item.tipoUbicacion === 'categoria' ? 'CATEGORÍA' : 'DIRECCIÓN' }}</span>
+              <span class="detalle-ficha__valor">{{ lugar(item) }}</span>
+            </div>
+            <div class="detalle-ficha__fila">
+              <span class="detalle-ficha__rotulo">RADIO DE AVISO</span>
+              <span class="detalle-ficha__valor">{{ radio(item) }}</span>
+            </div>
+          </section>
+          <section class="detalle-nota">
+            <h2>ALERTA POR PROXIMIDAD</h2>
+            <p>El aviso llegará a la aplicación móvil, no a esta pantalla.</p>
+          </section>
+        </div>
+
+        <div class="detalle-columna detalle-columna--mapa">
+          <p class="detalle-mapa-titulo">{{ item.tipoUbicacion === 'categoria' ? 'Dónde puede activarse' : 'Dónde se activa' }}</p>
+          <web-mapa-detalle [pendiente]="item" />
+          <section class="detalle-nota detalle-nota--comportamiento">
+            <h2>COMPORTAMIENTO</h2>
+            <p>{{ comportamiento(item) }}</p>
+          </section>
+        </div>
+      </div>
+
+      <footer class="detalle-acciones">
+        <ui-boton class="detalle-boton-volver" variante="secundario" (click)="volver()">Volver</ui-boton>
+        <ui-boton class="detalle-boton-editar" variante="primario" (click)="editar(item)">Editar pendiente</ui-boton>
+      </footer>
+    </main>
+  }
+</div>
