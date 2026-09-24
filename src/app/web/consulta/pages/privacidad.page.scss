@@ -1,0 +1,106 @@
+:host { display: block; min-height: 100%; }
+
+.privacidad-page {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--ui-surface-alt);
+  color: var(--ui-text-primary);
+  font-family: var(--ui-font);
+}
+
+.privacidad-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url('/assets/web/proximity-texture.svg') center top / 90rem 56.25rem no-repeat;
+  pointer-events: none;
+}
+
+.privacidad-main {
+  width: min(calc(100% - 12rem), 78rem);
+  margin-inline: auto;
+  padding-top: 3rem;
+}
+
+h1, h2, p { margin: 0; }
+h1 { font: 600 var(--ui-h1-size) / var(--ui-h1-line) var(--ui-font); letter-spacing: var(--ui-h1-track); }
+.privacidad-intro { margin-top: 0.5rem; color: var(--ui-text-secondary); font: 400 var(--ui-body-size) / var(--ui-body-line) var(--ui-font); }
+
+.privacidad-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 51rem) minmax(0, 24.5rem);
+  gap: 2.5rem;
+  margin-top: 2.375rem;
+}
+
+.privacidad-lista { display: grid; gap: 1.5rem; }
+.privacidad-tarjeta {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  gap: 1.25rem;
+  position: relative;
+  height: 8.75rem;
+  padding: 1.8125rem 1.9375rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-surface);
+}
+.privacidad-icono { position: relative; display: block; width: 2.75rem; height: 2.75rem; margin-top: 0.125rem; }
+.privacidad-icono img { position: absolute; display: block; max-width: none; }
+.privacidad-icono img:last-child { top: 0.8125rem; left: 0.8125rem; }
+.privacidad-tarjeta h2, .privacidad-enlace strong { font: 600 var(--ui-h3-size) / var(--ui-h3-line) var(--ui-font); letter-spacing: var(--ui-h3-track); }
+.privacidad-tarjeta p { margin-top: 0.25rem; color: var(--ui-text-secondary); font: 400 var(--ui-body-size) / var(--ui-body-line) var(--ui-font); }
+
+.privacidad-lateral { display: flex; flex-direction: column; gap: 1.5rem; }
+.privacidad-enlace {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  height: 5.5rem;
+  padding: 1.3125rem 1.9375rem;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-surface);
+  color: inherit;
+  text-decoration: none;
+}
+.privacidad-enlace strong, .privacidad-enlace small { display: block; }
+.privacidad-enlace strong { color: var(--ui-text-link); }
+.privacidad-enlace small { color: var(--ui-text-secondary); font: 400 var(--ui-caption-size) / var(--ui-caption-line) var(--ui-font); letter-spacing: var(--ui-caption-track); }
+.privacidad-enlace b { align-self: center; color: var(--ui-text-secondary); font: 600 var(--ui-h2-size) / var(--ui-h2-line) var(--ui-font); letter-spacing: -0.025rem; }
+
+.privacidad-nota {
+  position: relative;
+  height: 14.25rem;
+  margin-top: 1rem;
+  overflow: hidden;
+  border: 1.5px solid var(--ui-brand-border);
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-brand-subtle);
+}
+.privacidad-nota img { position: absolute; inset: 0; display: block; width: 24.5rem; height: 14.25rem; max-width: none; }
+.privacidad-nota div { position: absolute; top: 7.6875rem; left: 1.9375rem; right: 2rem; }
+.privacidad-nota h2 { color: var(--ui-brand); font: 600 var(--ui-body-size) / var(--ui-body-line) var(--ui-font); }
+.privacidad-nota p { margin-top: 0.375rem; color: var(--ui-text-secondary); font: 400 var(--ui-caption-size) / var(--ui-caption-line) var(--ui-font); letter-spacing: var(--ui-caption-track); }
+a:focus-visible { outline: 2px solid var(--ui-brand); outline-offset: 3px; }
+
+@media (max-width: 80rem) {
+  .privacidad-main { width: min(calc(100% - 4rem), 78rem); }
+  .privacidad-grid { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 1.5rem; }
+  .privacidad-nota img { max-width: 100%; }
+}
+
+@media (max-width: 64rem) {
+  .privacidad-grid { grid-template-columns: minmax(0, 1fr); }
+  .privacidad-lateral { max-width: 51rem; }
+  .privacidad-nota { max-width: 24.5rem; }
+}
+
+@media (max-width: 34rem) {
+  .privacidad-main { width: min(calc(100% - 2rem), 78rem); padding-top: 2rem; }
+  .privacidad-tarjeta { height: auto; min-height: 8.75rem; padding: 1.5rem; }
+  .privacidad-enlace { padding-inline: 1.5rem; }
+}
