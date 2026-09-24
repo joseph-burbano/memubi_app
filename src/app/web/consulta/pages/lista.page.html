@@ -69,4 +69,7 @@
     </section>
     }
   </main>
+  @if (mostrarAvisoGuardado()) {
+    <web-aviso-guardado (cerrar)="mostrarAvisoGuardado.set(false)" />
+  }
 </div>

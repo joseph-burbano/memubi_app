@@ -6,12 +6,15 @@ import { LocationService } from '../../../core/data/location.service';
 import { Pendiente } from '../../../core/models/pendiente.model';
 import { PendienteCardWebComponent } from '../ui/pendiente-card.web';
 import { MapaPendientesWebComponent } from '../ui/mapa-pendientes.web';
+import { AvisoGuardadoWebComponent } from '../ui/aviso-guardado.web';
 
-/** MW0, MW1, MW1b y MW1d: estados de la misma ruta. */
+/** MW0, MW1, MW1b, MW1d y MW1e: estados de la misma ruta. */
+let totalAntesDeCrear: number | null = null;
+
 @Component({
   selector: 'app-web-lista',
   standalone: true,
-  imports: [BotonComponent, PendienteCardWebComponent, MapaPendientesWebComponent],
+  imports: [BotonComponent, PendienteCardWebComponent, MapaPendientesWebComponent, AvisoGuardadoWebComponent],
   templateUrl: './lista.page.html',
   styleUrl: './lista.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,6 +24,7 @@ export class ListaPage implements OnInit {
   private readonly ubicacion = inject(LocationService);
   readonly pendientes = inject(PendientesStore);
   readonly vista = signal<'lista' | 'mapa'>('lista');
+  readonly mostrarAvisoGuardado = signal(false);
   readonly cercanos = signal<ReadonlySet<string>>(new Set());
   readonly completados = computed(() => this.pendientes.pendientes().filter((p) => p.estado === 'realizado'));
   readonly resumenCompletados = computed(() => {
@@ -43,6 +47,14 @@ export class ListaPage implements OnInit {
     await this.pendientes.asegurarCargado();
   }
 
+  /** Ionic conserva la página al abrir /crear; este hook corre al regresar. */
+  ionViewWillEnter(): void {
+    if (totalAntesDeCrear !== null) {
+      this.mostrarAvisoGuardado.set(this.pendientes.pendientes().length > totalAntesDeCrear);
+      totalAntesDeCrear = null;
+    }
+  }
+
   private async actualizarCercanos(activos: readonly Pendiente[]): Promise<void> {
     const calculoActual = ++this.calculoCercania;
     const ids = await Promise.all(activos.map(async (pendiente) => {
@@ -59,6 +71,7 @@ export class ListaPage implements OnInit {
 
   seleccionarVista(vista: 'lista' | 'mapa'): void {
     if (vista === 'mapa' && this.pendientes.activos().length === 0) return;
+    if (vista === 'mapa') this.mostrarAvisoGuardado.set(false);
     this.vista.set(vista);
   }
 
@@ -68,6 +81,7 @@ export class ListaPage implements OnInit {
   }
 
   irACrear(): void {
+    totalAntesDeCrear = this.pendientes.pendientes().length;
     void this.router.navigate(['/crear']);
   }
 }
