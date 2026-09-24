@@ -227,6 +227,13 @@ h1 {
   line-height: 1.625rem;
 }
 
+.mw1-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2.25rem;
+}
+
 @media (max-width: 48rem) {
   .mw0-header__inner,
   .mw0-main {

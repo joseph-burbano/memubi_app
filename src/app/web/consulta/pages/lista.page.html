@@ -19,7 +19,11 @@
   <main class="mw0-main">
     <h1>Mis pendientes</h1>
     <p class="mw0-intro">
-      Todavía no tienes pendientes. Crea el primero y te avisaremos cuando pases cerca del lugar.
+      @if (pendientes.pendientes().length > 0) {
+        Tus recordatorios activos. Los avisos por cercanía llegan a la aplicación móvil.
+      } @else {
+        Todavía no tienes pendientes. Crea el primero y te avisaremos cuando pases cerca del lugar.
+      }
     </p>
 
     <div class="mw0-actions">
@@ -34,6 +38,13 @@
       </ui-boton>
     </div>
 
+    @if (pendientes.pendientes().length > 0) {
+      <section class="mw1-list" aria-label="Pendientes activos">
+        @for (pendiente of pendientes.activos(); track pendiente.id) {
+          <web-pendiente-card [pendiente]="pendiente" />
+        }
+      </section>
+    } @else {
     <section class="mw0-empty-card" aria-labelledby="mw0-empty-title">
       <div class="mw0-empty-card__illustration" aria-hidden="true">
         <img src="assets/web/empty-ring-outer.svg" alt="" width="240" height="240" />
@@ -46,5 +57,6 @@
         <p>Cada uno se activa solo cuando pasas cerca del lugar que elijas.</p>
       </div>
     </section>
+    }
   </main>
 </div>
