@@ -71,24 +71,24 @@ import { BotonComponent } from '../../../ui/boton';
         background: transparent;
       }
       .permiso {
-        display: flex;
+        position: relative;
         min-height: 0;
-        overflow-y: auto;
-        flex-direction: column;
         flex: 1;
         padding: 0 1.25rem;
-        /* 68px de aire bajo "Ahora no": es lo que deja MM01 (el enlace
-         * termina en 628 de 696 de área de contenido). Con el pie más
-         * alto, empujar con margin-top:auto cae justo donde el mockup,
-         * y en pantallas más altas o más bajas sigue comportándose. */
-        padding-bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px));
+        overflow: hidden;
       }
       .permiso__ilustracion {
+        position: absolute;
+        top: -1.25rem;
+        left: 50%;
         display: flex;
-        justify-content: center;
-        padding: 2.5rem 0 1rem;
+        transform: translateX(-50%);
       }
       .permiso__titulo {
+        position: absolute;
+        top: 14.5rem;
+        left: 1.25rem;
+        right: 1.25rem;
         margin: 0;
         font: 600 var(--ui-h2-size) / var(--ui-h2-line) var(--ui-font);
         letter-spacing: var(--ui-h2-track);
@@ -96,19 +96,29 @@ import { BotonComponent } from '../../../ui/boton';
         text-align: center;
       }
       .permiso__texto {
-        margin: 1.5rem 0 0;
+        position: absolute;
+        top: 18.5rem;
+        left: 1.25rem;
+        right: 1.25rem;
+        margin: 0;
         font: 400 var(--ui-body-size) / var(--ui-body-line) var(--ui-font);
         color: var(--ui-text-secondary);
       }
       .permiso__nota {
-        margin: 1.5rem 0 0;
+        position: absolute;
+        top: 26rem;
+        left: 1.25rem;
+        right: 1.25rem;
+        margin: 0;
         font: 400 var(--ui-caption-size) / var(--ui-caption-line) var(--ui-font);
         letter-spacing: var(--ui-caption-track);
         color: var(--ui-text-secondary);
       }
       .permiso__acciones {
-        margin-top: auto;
-        padding-top: 2rem;
+        position: absolute;
+        left: 1.25rem;
+        right: 1.25rem;
+        bottom: calc(3rem + env(safe-area-inset-bottom, 0px));
       }
       .permiso__secundario {
         width: 100%;
@@ -125,6 +135,10 @@ import { BotonComponent } from '../../../ui/boton';
        * neutra, es la opción que apaga la función principal. */
       .permiso__secundario--apagado {
         color: var(--ui-text-secondary);
+      }
+      @media (max-height: 43rem) {
+        .permiso { overflow-y: auto; }
+        .permiso__acciones { position: relative; left: auto; right: auto; bottom: auto; padding: 33rem 0 2rem; }
       }
     `,
   ],

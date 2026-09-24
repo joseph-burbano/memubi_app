@@ -13,6 +13,9 @@ import { PASO_ESTILOS } from '../ui/paso-estilos';
     <mob-paso-shell [deshabilitado]="!puedeSeguir()" (volver)="volver()" (siguiente)="siguiente()">
       <p class="paso ui-overline">Paso 2 de 3</p>
       <h2 class="titulo ui-h2">Selecciona una dirección</h2>
+      @if (!borrador.borrador().direccion) {
+        <p class="ayuda ui-body">Busca una dirección o toca un punto del mapa.</p>
+      }
       <mob-direccion-selector [direccion]="borrador.borrador().direccion" [radio]="borrador.borrador().radioAviso"
         (elegir)="borrador.parchar({ direccion: $event })" />
     </mob-paso-shell>

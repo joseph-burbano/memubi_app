@@ -61,29 +61,20 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   `,
   styles: [
     `
-      /* SIN padding de safe-area a propósito.
-       *
-       * StatusBar.setOverlaysWebView({ overlay: false }) hace que
-       * Android reserve el alto de su barra POR FUERA del WebView. Si
-       * además sumáramos env(safe-area-inset-top), el espacio se contaría
-       * dos veces y aparecería una banda teal vacía entre el reloj del
-       * sistema y el nombre de la app.
-       *
-       * Si alguna vez se pasa a overlay: true, hay que volver a poner el
-       * padding — pero entonces sobra la reserva de Android. Es uno o el
-       * otro, nunca los dos. */
       .barra {
         background: var(--ui-brand);
         color: var(--ui-text-inverse);
       }
-      /* 56px = los 104 del marco menos los 48 de la barra de sistema
-       * simulada, que en el dispositivo la pone Android. */
+      /* Android 15 fuerza edge-to-edge para apps con target 35. El inset
+       * desplaza solo el contenido: el fondo teal continúa detrás de la
+       * barra real del SO, sin recrear la hora ni la batería de Figma. */
       .barra__marca {
         display: flex;
         align-items: center;
         gap: 0.625rem;
-        height: 3.5rem;
-        padding: 0 1.25rem;
+        height: calc(3.5rem + env(safe-area-inset-top, 0px));
+        padding: env(safe-area-inset-top, 0px) 1.25rem 0;
+        box-sizing: border-box;
       }
       .barra__logo {
         position: relative;
