@@ -1,4 +1,4 @@
-import { Component, Input, booleanAttribute } from '@angular/core';
+import { Component, EventEmitter, Input, Output, booleanAttribute } from '@angular/core';
 import { Lugar } from '../../../core/models/lugar.model';
 import { RadioAviso } from '../../../core/models/radio.model';
 
@@ -45,14 +45,28 @@ import { RadioAviso } from '../../../core/models/radio.model';
       }
 
       @for (c of candidatos; track c.id; let i = $index) {
-        <div
-          class="marcador marcador--candidato"
-          [class.marcador--fuera]="c.distanciaMetros > radio"
-          [style.left.px]="posicion(c, i).x"
-          [style.top.px]="posicion(c, i).y"
-        >
-          <span class="marcador__anillo"></span>
-        </div>
+        @if (seleccionable) {
+          <button
+            class="marcador marcador--candidato marcador--pulsable"
+            type="button"
+            [attr.aria-label]="'Elegir ' + c.direccion"
+            [class.marcador--fuera]="c.distanciaMetros > radio"
+            [style.left.px]="posicion(c, i).x"
+            [style.top.px]="posicion(c, i).y"
+            (click)="elegirLugar.emit(c)"
+          >
+            <span class="marcador__anillo"></span>
+          </button>
+        } @else {
+          <div
+            class="marcador marcador--candidato"
+            [class.marcador--fuera]="c.distanciaMetros > radio"
+            [style.left.px]="posicion(c, i).x"
+            [style.top.px]="posicion(c, i).y"
+          >
+            <span class="marcador__anillo"></span>
+          </div>
+        }
       }
     </div>
   `,
@@ -149,6 +163,26 @@ import { RadioAviso } from '../../../core/models/radio.model';
         top: 50%;
         left: 50%;
       }
+      /* Solo la rama dirección los vuelve pulsables. El objetivo táctil
+       * es mayor que el punto dibujado. */
+      .marcador--pulsable {
+        padding: 0.5rem;
+        margin: -0.5rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+      .marcador--pulsable:focus-visible {
+        outline: 2px solid var(--ui-brand);
+        outline-offset: 2px;
+        border-radius: var(--ui-radius-pill);
+      }
+      .marcador--pulsable:hover .marcador__anillo {
+        transform: scale(1.15);
+      }
+      .marcador__anillo {
+        transition: transform 0.12s ease;
+      }
     `,
   ],
 })
@@ -159,8 +193,26 @@ export class MapaRadioComponent {
   @Input() alto = 380;
   /** Con dirección elegida el geocerco se centra en ella, no en ti. */
   @Input() destino = '';
-  /** Solo la rama dirección deja elegir; la de categoría nunca. */
+  /**
+   * Solo la rama DIRECCIÓN deja elegir; la de categoría nunca.
+   *
+   * No es un detalle de interacción: viene de la Entrega 3. En categoría
+   * el pendiente se activa con cualquiera de los lugares, así que elegir
+   * uno concreto contradiría el significado de "cualquier supermercado".
+   * Con esto en false los marcadores son `div` y no hay nada que pulsar.
+   */
   @Input({ transform: booleanAttribute }) seleccionable = false;
+
+  /**
+   * El "toca un punto del mapa" de MW2c.
+   *
+   * Los puntos pulsables son los marcadores, no cualquier píxel: son las
+   * direcciones que el prototipo conoce. Tocar el vacío exigiría
+   * geocodificación inversa —convertir coordenadas en una dirección— y
+   * eso es backend, que esta entrega no tiene. Inventar una dirección
+   * para un punto cualquiera sería mentir sobre lo que la app sabe.
+   */
+  @Output() elegirLugar = new EventEmitter<Lugar>();
 
   /**
    * Ángulos fijos, no aleatorios: la demo tiene que verse igual siempre.

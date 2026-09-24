@@ -65,6 +65,7 @@ import { RadioAviso } from '../../../core/models/radio.model';
             [destino]="etiqueta()"
             [candidatos]="candidatos"
             seleccionable
+            (elegirLugar)="elegida.set($event.direccion)"
           />
         </div>
 
