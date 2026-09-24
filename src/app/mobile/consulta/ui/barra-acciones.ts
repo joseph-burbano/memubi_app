@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { BotonComponent } from '../../../ui/boton';
+import { BorradorStore } from '../../../core/store/borrador.store';
 
 /**
  * Barra inferior de "Mis pendientes". Idéntica en `MM03` y `MM12`.
@@ -20,7 +21,7 @@ import { BotonComponent } from '../../../ui/boton';
   template: `
     <div class="acciones">
       <a class="acciones__enlace" routerLink="/configuracion">Configuración</a>
-      <ui-boton class="acciones__nuevo" variante="primario" (click)="crear.emit()">
+      <ui-boton class="acciones__nuevo" variante="primario" (click)="crear()">
         Nuevo pendiente
       </ui-boton>
     </div>
@@ -52,18 +53,10 @@ import { BotonComponent } from '../../../ui/boton';
   ],
 })
 export class BarraAccionesComponent {
-  /**
-   * ANDAMIO TEMPORAL — DUEÑO DEL REEMPLAZO: Joseph.
-   *
-   * Hoy este botón no navega: la lista lo usa para crear un pendiente de
-   * mentira y poder ver cómo crece el listado. El asistente de creación
-   * (`mobile/crear/`, MM04→MM11) todavía no existe, y apuntar a su ruta
-   * dejaría la pantalla en blanco durante la demo.
-   *
-   * CUANDO EL ASISTENTE ESTÉ LISTO se borra este `@Output`, se vuelve a
-   * poner `routerLink="/crear/que-y-donde"` y se elimina `crearDePrueba()`
-   * en `pendientes.page`. Es un cambio de una línea, a propósito: así no
-   * queda un archivo ajeno que alguien tenga que limpiar.
-   */
-  @Output() crear = new EventEmitter<void>();
+  private readonly borrador = inject(BorradorStore);
+  private readonly router = inject(Router);
+  crear(): void {
+    this.borrador.limpiar();
+    void this.router.navigate(['/crear/que-y-donde']);
+  }
 }

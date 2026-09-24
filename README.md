@@ -45,11 +45,9 @@ El APK queda en `android/app/build/outputs/apk/debug/app-debug.apk`.
 
 El prototipo no tiene GPS, así que la alerta de proximidad no puede dispararse sola. Para poder recorrer el flujo completo con el dedo, la versión móvil incluye **dos atajos de demostración**. No son funciones del producto y no aparecen en ningún mockup: existen únicamente para poder mostrar los recorridos.
 
-### 1. "Nuevo pendiente" crea un pendiente de ejemplo
+### 1. "Nuevo pendiente" abre el asistente
 
-La aplicación **arranca sin pendientes**, que es lo que ve de verdad quien la instala. Cada toque en *Nuevo pendiente* agrega uno, en orden: los tres primeros reconstruyen la pantalla del mockup `MM12` tal cual.
-
-El asistente de creación real —las pantallas donde el usuario escribe el título y elige el lugar— está en construcción. Este botón lo sustituye mientras tanto.
+La aplicación **arranca sin pendientes**. *Nuevo pendiente* abre el asistente de tres pasos: escribe qué recordar, elige una categoría o dirección y revisa antes de guardar. Los datos de la demo se pierden al cerrar la aplicación.
 
 ### 2. Mantener pulsada una tarjeta dispara su alerta
 
@@ -62,8 +60,9 @@ Se eligió la pulsación larga, y no un botón, porque **no agrega un solo eleme
 ### Recorrido sugerido
 
 ```
-Permiso de ubicación  ->  Sin pendientes  ->  [Nuevo pendiente] x3
-                      ->  Mis pendientes  ->  [tocar una tarjeta]  ->  Detalle
+Permiso de ubicación  ->  Sin pendientes  ->  Nuevo pendiente
+                      ->  Elegir ubicación  ->  Revisar  ->  Mis pendientes
+                      ->  [tocar una tarjeta]  ->  Detalle  ->  Editar pendiente
                       ->  [mantener pulsada]  ->  Alerta de proximidad
                       ->  Marcar como realizado  ->  Pendiente realizado
                       ->  Mis pendientes, con el pendiente tachado
@@ -139,15 +138,15 @@ La tipografía es **Inter**, empaquetada con la aplicación. No viene con Androi
 | Plataforma | Pantallas |
 | --- | --- |
 | **Móvil · consulta** | Permiso de ubicación · Mis pendientes (vacío, con pendientes y con completados) · Detalle · Alerta de proximidad · Desenlace de la alerta · Configuración · Privacidad y ubicación · Privacidad y datos |
+| **Móvil · crear** | Asistente por categoría o dirección · Revisión · Aviso de guardado · Edición y confirmación de cambios |
 | **Web** | Mis pendientes (estado inicial) |
 
-Quince marcos del mockup móvil en ocho páginas: siete de esos marcos son **estados** de una pantalla y no pantallas distintas. El estado vacío de la lista, por ejemplo, no es otra ruta.
+Los marcos del mockup móvil se agrupan por recorrido: los estados de selección, la lista vacía y la lista con completados cambian dentro de sus páginas y no crean rutas adicionales.
 
 ### En construcción
 
 | Plataforma | Pendiente |
 | --- | --- |
-| **Móvil · crear** | Asistente de creación y edición de pendientes |
 | **Web · crear** | Creación, confirmación y edición |
 | **Web · consulta** | Detalle, privacidad y uso de la ubicación |
 

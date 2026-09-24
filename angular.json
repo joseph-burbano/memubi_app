@@ -36,6 +36,11 @@
                 "glob": "**/*",
                 "input": "src/app/web/assets",
                 "output": "assets/web"
+              },
+              {
+                "glob": "*.svg",
+                "input": "src/app/mobile/crear",
+                "output": "assets/mobile/crear"
               }
             ],
             "styles": [

@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { Capacitor, registerPlugin } from '@capacitor/core';
 import { BarraSuperiorComponent } from '../../ui/barra-superior';
 import { BotonComponent } from '../../../ui/boton';
 import { InterruptorComponent } from '../../../ui/interruptor';
@@ -15,12 +16,15 @@ import { InterruptorComponent } from '../../../ui/interruptor';
  * la función principal está desactivada, el texto que lo explica deja de
  * ser letra pequeña y pasa a primer plano.
  *
- * "Abrir configuración" NO HACE NADA todavía. En el producto real
- * llevaría a los ajustes del sistema; aquí es un prototipo no funcional.
- * Y el texto de la tarjeta dice por qué existe: el acceso a la ubicación
- * y el segundo plano se administran desde el dispositivo, no desde la
- * app. Eso mismo es lo que sostiene que la web no tenga esta pantalla.
+ * El acceso a la ubicación se administra desde el dispositivo. En Android,
+ * "Abrir configuración" abre directamente sus ajustes de Ubicación.
  */
+interface LocationSettingsPlugin {
+  openLocationSettings(): Promise<void>;
+}
+
+const locationSettings = registerPlugin<LocationSettingsPlugin>('LocationSettings');
+
 @Component({
   selector: 'mob-privacidad-ubicacion',
   standalone: true,
@@ -58,9 +62,12 @@ import { InterruptorComponent } from '../../../ui/interruptor';
         </section>
 
         <div class="privacidad__accion">
-          <ui-boton variante="secundario" anchoCompleto>
+          <ui-boton variante="secundario" anchoCompleto [deshabilitado]="abriendoAjustes()" (click)="abrirConfiguracion()">
             Abrir configuración
           </ui-boton>
+          @if (errorAjustes()) {
+            <p class="privacidad__error" role="alert">{{ errorAjustes() }}</p>
+          }
         </div>
       </main>
     </div>
@@ -121,6 +128,11 @@ import { InterruptorComponent } from '../../../ui/interruptor';
       .privacidad__accion {
         margin-top: 1.75rem;
       }
+      .privacidad__error {
+        margin: 0.75rem 0 0;
+        color: var(--ui-text-primary);
+        font: 400 var(--ui-caption-size) / var(--ui-caption-line) var(--ui-font);
+      }
     `,
   ],
 })
@@ -129,12 +141,31 @@ export class PrivacidadUbicacionPage {
 
   /** true = MM24 · false = MM24b */
   readonly activas = signal(true);
+  readonly abriendoAjustes = signal(false);
+  readonly errorAjustes = signal('');
 
   readonly aviso = computed(() =>
     this.activas()
       ? 'Si desactivas esta opción, los recordatorios basados en ubicación dejarán de funcionar.'
       : 'Las alertas por lugar están desactivadas. No recibirás recordatorios al pasar cerca de un lugar.',
   );
+
+  async abrirConfiguracion(): Promise<void> {
+    this.errorAjustes.set('');
+    if (!Capacitor.isNativePlatform()) {
+      this.errorAjustes.set('Los ajustes de ubicación solo están disponibles en el dispositivo.');
+      return;
+    }
+
+    this.abriendoAjustes.set(true);
+    try {
+      await locationSettings.openLocationSettings();
+    } catch {
+      this.errorAjustes.set('No se pudieron abrir los ajustes de ubicación.');
+    } finally {
+      this.abriendoAjustes.set(false);
+    }
+  }
 
   /** MM24 -> MM23 · Configuración. Todavía no existe: entra en el commit 3. */
   volver(): void {

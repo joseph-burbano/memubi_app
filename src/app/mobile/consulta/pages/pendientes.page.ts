@@ -1,31 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BarraSuperiorComponent } from '../../ui/barra-superior';
 import { AnillosProximidadComponent } from '../../ui/anillos-proximidad';
 import { BarraAccionesComponent } from '../ui/barra-acciones';
 import { PendienteCardMobileComponent } from '../ui/pendiente-card.mobile';
 import { PendientesStore } from '../../../core/store/pendientes.store';
-import { Pendiente } from '../../../core/models/pendiente.model';
-
-/**
- * Semillas para el andamio de creación. Salen del vocabulario del
- * producto —categorías reales, direcciones de Madrid— para que la demo
- * no muestre "Prueba 1" al lado de "Comprar leche".
- */
-const SEMILLAS: ReadonlyArray<Omit<Pendiente, 'id' | 'estado'>> = [
-  // Los tres primeros son EXACTAMENTE los de MM12: tres toques y la
-  // pantalla queda igual que el mockup.
-  { titulo: 'Comprar leche', tipoUbicacion: 'categoria', categoria: 'supermercado', radioAviso: 500 },
-  { titulo: 'Recoger medicamento', tipoUbicacion: 'direccion', direccion: 'Farmacia cerca de Calle de Alcalá', radioAviso: 500 },
-  { titulo: 'Cambiar las cuerdas del cello', tipoUbicacion: 'direccion', direccion: 'Una dirección específica', radioAviso: 500 },
-  // De aquí en adelante, para seguir poblando la lista.
-  { titulo: 'Comprar pan', tipoUbicacion: 'direccion', direccion: 'Panadería del barrio', radioAviso: 500 },
-  { titulo: 'Comprar pilas', tipoUbicacion: 'categoria', categoria: 'ferreteria', radioAviso: 500 },
-  { titulo: 'Recoger la receta', tipoUbicacion: 'categoria', categoria: 'farmacia', radioAviso: 200 },
-  { titulo: 'Comprar café', tipoUbicacion: 'categoria', categoria: 'supermercado', radioAviso: 1000 },
-  { titulo: 'Cambiar el regalo', tipoUbicacion: 'categoria', categoria: 'centro-comercial', radioAviso: 1000 },
-  { titulo: 'Pasar por la tintorería', tipoUbicacion: 'direccion', direccion: 'Calle Mayor 12, Madrid', radioAviso: 200 },
-];
 
 const LETRAS = [
   'cero', 'uno', 'dos', 'tres', 'cuatro',
@@ -108,12 +87,20 @@ function mayuscula(texto: string): string {
         }
       </main>
 
-      <mob-barra-acciones (crear)="crearDePrueba()" />
+      @if (guardado()) {
+        <div class="aviso" role="status">
+          <span class="aviso__icono" aria-hidden="true">◎</span>
+          <span><strong>Pendiente guardado</strong><br />Te avisaremos al pasar cerca</span>
+          <button type="button" aria-label="Cerrar aviso" (click)="guardado.set(false)">×</button>
+        </div>
+      }
+      <mob-barra-acciones />
     </div>
   `,
   styles: [
     `
       .pantalla {
+        position: relative;
         display: flex;
         flex-direction: column;
         height: 100dvh;
@@ -144,6 +131,14 @@ function mayuscula(texto: string): string {
         padding: 0;
         list-style: none;
       }
+      .aviso { position: absolute; z-index: 2; left: 1.25rem; right: 1.25rem;
+        bottom: calc(8.75rem + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 0.75rem;
+        padding: 0.75rem 1rem; border-radius: var(--ui-radius-sm); background: var(--ui-brand);
+        color: var(--ui-text-inverse); font: 400 var(--ui-caption-size) / var(--ui-caption-line) var(--ui-font); }
+      .aviso strong { font-weight: 600; }
+      .aviso__icono { font-size: 1.5rem; }
+      .aviso button { margin-left: auto; width: 2.75rem; height: 2.75rem; border: 0; background: transparent;
+        color: inherit; font-size: 1.5rem; cursor: pointer; }
 
       /* --- Estado vacío · MM03 --- */
       .vacio {
@@ -175,8 +170,10 @@ function mayuscula(texto: string): string {
 export class PendientesPage implements OnInit {
   readonly store = inject(PendientesStore);
   private readonly router = inject(Router);
+  readonly guardado = signal(false);
 
   ngOnInit(): void {
+    this.guardado.set(!!this.router.currentNavigation()?.extras.state?.['pendienteGuardado']);
     void this.store.cargar();
   }
 
@@ -191,24 +188,6 @@ export class PendientesPage implements OnInit {
    * Los mockups escriben los números con letra, no con cifra. No es
    * capricho: con este público un "3" suelto se lee peor que "tres".
    */
-  /**
-   * ANDAMIO TEMPORAL — lo reemplaza el asistente de Joseph (MM04→MM11).
-   *
-   * Crea un pendiente de mentira para poder ver cómo crece el listado.
-   * Escribe por el mismo camino que usará el asistente real —el store y
-   * de ahí el repositorio—, así que lo que se demuestra aquí no es un
-   * truco de pantalla: es el backmock funcionando.
-   *
-   * Al cerrar la app se pierde, que es lo que se quiere para repetir la
-   * demostración desde cero.
-   */
-  async crearDePrueba(): Promise<void> {
-    // En orden y no al azar: así la demostración es repetible y los tres
-    // primeros toques reproducen MM12 tal cual.
-    const i = this.store.pendientes().length % SEMILLAS.length;
-    await this.store.guardar(SEMILLAS[i]);
-  }
-
   /**
    * Atajo de DEMOSTRACIÓN: mantener pulsada una tarjeta abre su alerta.
    * En el producto real la dispara una geocerca del sistema operativo.
