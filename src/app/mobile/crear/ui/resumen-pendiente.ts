@@ -19,11 +19,14 @@ import { RADIOS } from '../../../core/models/radio.model';
     <p class="promesa ui-label-field">{{ promesa() }}</p>
   `,
   styles: [`
-    .ficha { margin: 0; padding: 1.25rem; border: 1px solid var(--ui-border); border-radius: var(--ui-radius-md); background: var(--ui-surface); }
-    .fila + .fila { margin-top: 0.625rem; padding-top: 0.625rem; border-top: 1px solid var(--ui-border); }
+    .ficha { display: grid; grid-template-rows: repeat(4, minmax(0, 1fr)); height: 20rem; box-sizing: border-box;
+      margin: 0; padding: 1.25rem; border: 1px solid var(--ui-border); border-radius: var(--ui-radius-md); background: var(--ui-surface); }
+    .fila { display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+    .fila + .fila { border-top: 1px solid var(--ui-border); }
     dt { color: var(--ui-text-secondary); }
     dd { margin: var(--ui-space-1) 0 0; font: 600 var(--ui-body-size) / var(--ui-body-line) var(--ui-font); color: var(--ui-text-primary); }
-    .promesa { margin: var(--ui-space-3) 0 0; padding: 1.25rem; border: 1.5px solid var(--ui-brand-border);
+    .promesa { display: flex; align-items: center; min-height: 5.5rem; box-sizing: border-box;
+      margin: var(--ui-space-3) 0 0; padding: 1.25rem; border: 1.5px solid var(--ui-brand-border);
       border-radius: 0.875rem; background: var(--ui-brand-subtle); color: var(--ui-brand); }
   `],
 })

@@ -45,8 +45,8 @@ import { RADIO_POR_DEFECTO, RadioAviso } from '../../../core/models/radio.model'
       }
     } @else {
       <img class="mapa mapa--vacio" src="assets/mobile/crear/mapa-direccion-vacio.svg" alt="Mapa de ejemplo para buscar una dirección" />
-      <p class="rotulo ui-overline">Cerca de donde estás</p>
-      <p class="pista ui-body">Busca una dirección para elegirla en la lista.</p>
+      <p class="rotulo ui-overline">Dirección seleccionada</p>
+      <p class="pista ui-body">Ninguna dirección seleccionada.</p>
     }
   `,
   styles: [`

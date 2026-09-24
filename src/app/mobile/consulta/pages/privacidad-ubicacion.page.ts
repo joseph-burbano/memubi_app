@@ -89,7 +89,7 @@ const locationSettings = registerPlugin<LocationSettingsPlugin>('LocationSetting
         padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
       }
       .tarjeta {
-        padding: 1.25rem;
+        padding: 0.75rem 1.25rem;
         background: var(--ui-surface);
         border: 1px solid var(--ui-border);
         border-radius: var(--ui-radius-md);
@@ -102,6 +102,8 @@ const locationSettings = registerPlugin<LocationSettingsPlugin>('LocationSetting
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
+        min-height: 5rem;
+        box-sizing: border-box;
       }
       .tarjeta__titulo {
         margin: 0;

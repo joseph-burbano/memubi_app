@@ -73,13 +73,20 @@ import { Categoria } from '../core/models/categoria.model';
         outline-offset: 2px;
       }
       .tile--movil {
+        position: relative;
         flex-direction: column;
         align-items: stretch;
         gap: var(--ui-space-3);
+        height: 8.5rem;
         min-height: 8.5rem;
         padding: var(--ui-space-4);
         border-radius: 0.875rem;
         font: 500 var(--ui-field-size) / var(--ui-field-line) var(--ui-font);
+      }
+      .tile--movil > span:last-child {
+        font: 500 var(--ui-field-size) / var(--ui-field-line) var(--ui-font);
+        overflow-wrap: normal;
+        word-break: normal;
       }
       .tile--movil .tile__marca {
         display: grid;
@@ -98,7 +105,17 @@ import { Categoria } from '../core/models/categoria.model';
         border-radius: var(--ui-radius-pill);
       }
       .tile--movil.tile--seleccionada .tile__marca { background: var(--ui-surface-sunken); }
-      .tile--movil.tile--seleccionada .tile__marca::after { border-color: var(--ui-brand); }
+      .tile--movil.tile--seleccionada .tile__marca::after { border-color: var(--ui-border-strong); }
+      .tile--movil.tile--seleccionada::after {
+        content: '';
+        position: absolute;
+        top: 0.625rem;
+        right: 0.625rem;
+        width: 1rem;
+        height: 1rem;
+        border-radius: var(--ui-radius-pill);
+        background: var(--ui-brand);
+      }
     `,
   ],
 })

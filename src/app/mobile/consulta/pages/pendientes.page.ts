@@ -132,7 +132,8 @@ function mayuscula(texto: string): string {
         list-style: none;
       }
       .aviso { position: absolute; z-index: 2; left: 1.25rem; right: 1.25rem;
-        bottom: calc(8.75rem + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 0.75rem;
+        bottom: calc(9.25rem + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 0.75rem;
+        min-height: 4.5rem; box-sizing: border-box;
         padding: 0.75rem 1rem; border-radius: var(--ui-radius-sm); background: var(--ui-brand);
         color: var(--ui-text-inverse); font: 400 var(--ui-caption-size) / var(--ui-caption-line) var(--ui-font); }
       .aviso strong { font-weight: 600; }
@@ -142,24 +143,39 @@ function mayuscula(texto: string): string {
 
       /* --- Estado vacío · MM03 --- */
       .vacio {
+        position: relative;
+        height: 15rem;
+        box-sizing: border-box;
         margin-top: 1.5rem;
-        padding: 1.25rem;
+        padding: 0;
+        overflow: hidden;
         background: var(--ui-surface);
         border: 1px solid var(--ui-border);
         border-radius: var(--ui-radius-md);
         text-align: center;
       }
       .vacio__ilustracion {
+        position: absolute;
+        top: -0.125rem;
+        left: 50%;
         display: flex;
-        justify-content: center;
+        transform: translateX(-50%);
       }
       .vacio__titulo {
-        margin: 0.5rem 0 0;
+        position: absolute;
+        top: 9.75rem;
+        left: 1rem;
+        right: 1rem;
+        margin: 0;
         font: 600 var(--ui-body-size) / var(--ui-body-line) var(--ui-font);
         color: var(--ui-text-primary);
       }
       .vacio__texto {
-        margin: 0.5rem 0 0;
+        position: absolute;
+        top: 11.5rem;
+        left: 1rem;
+        right: 1rem;
+        margin: 0;
         font: 400 var(--ui-caption-size) / var(--ui-caption-line) var(--ui-font);
         letter-spacing: var(--ui-caption-track);
         color: var(--ui-text-secondary);
@@ -173,7 +189,12 @@ export class PendientesPage implements OnInit {
   readonly guardado = signal(false);
 
   ngOnInit(): void {
-    this.guardado.set(!!this.router.currentNavigation()?.extras.state?.['pendienteGuardado']);
+    const estadoNavegacion = this.router.currentNavigation()?.extras.state?.['pendienteGuardado'];
+    const estadoHistorial = history.state?.['pendienteGuardado'];
+    this.guardado.set(!!(estadoNavegacion ?? estadoHistorial));
+    if (estadoHistorial) {
+      history.replaceState({ ...history.state, pendienteGuardado: false }, document.title);
+    }
     void this.store.cargar();
   }
 

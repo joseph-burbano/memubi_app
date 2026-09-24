@@ -60,7 +60,8 @@
  * limpio, y por eso el degradado termina en transparente en vez de
  * repetirse.
  */
-body {
+body,
+ion-app {
   background-color: var(--ui-surface-alt);
   background-image: radial-gradient(
       circle at calc(100% - 30px) calc(100% + 60px),
@@ -86,6 +87,15 @@ body {
     );
   background-repeat: no-repeat;
   background-attachment: fixed;
+  background-size: 100% 100%;
+}
+
+/* `ion-app` tiene su propia superficie y cubre por completo al `body`.
+ * La textura debe vivir también aquí; de lo contrario solo asomaban uno
+ * o dos arcos en algunos WebViews aunque el degradado ya tuviera los nueve
+ * anillos definidos en Figma. */
+ion-router-outlet {
+  background: transparent;
 }
 
 /* ---------- El contenedor de scroll de cada página ----------
