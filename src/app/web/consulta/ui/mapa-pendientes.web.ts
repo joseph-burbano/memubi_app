@@ -8,8 +8,15 @@ import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.mo
   standalone: true,
   imports: [RouterLink],
   template: `
-    <section class="vista-mapa" aria-label="Pendientes en el mapa">
+    <section class="vista-mapa" [class.vista-mapa--vacio]="pendientes.length === 0" aria-label="Pendientes en el mapa">
       <div class="mapa" role="group" aria-label="Mapa ilustrativo con tu posición y los pendientes">
+          @if (pendientes.length === 0) {
+          <img class="vacio-anillo vacio-anillo--exterior" src="assets/web/mapa-anillo-384.svg" alt="" width="384" height="384" />
+          <img class="vacio-anillo vacio-anillo--medio" src="assets/web/mapa-anillo-256.svg" alt="" width="256" height="256" />
+          <img class="vacio-anillo vacio-anillo--interior" src="assets/web/mapa-anillo-128.svg" alt="" width="128" height="128" />
+          <img class="vacio-punto" src="assets/web/empty-dot.svg" alt="" width="22" height="22" />
+          <span class="vacio-etiqueta">TÚ</span>
+        } @else {
         <img class="anillo anillo--exterior" src="assets/web/mapa-anillo-384.svg" alt="" width="384" height="384" />
         <img class="anillo anillo--medio" src="assets/web/mapa-anillo-256.svg" alt="" width="256" height="256" />
         <img class="anillo anillo--interior" src="assets/web/mapa-anillo-128.svg" alt="" width="128" height="128" />
@@ -40,10 +47,20 @@ import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.mo
             }
           </a>
         }
+        }
       </div>
 
       <aside class="panel" aria-labelledby="mapa-panel-titulo">
         <h2 id="mapa-panel-titulo">Cerca de ti</h2>
+        @if (pendientes.length === 0) {
+          <p class="panel__vacio">Cuando crees un pendiente, el lugar donde se activa aparecerá aquí y sobre el mapa.</p>
+          <div class="panel__ilustracion" aria-hidden="true">
+            <img src="assets/web/mapa-vacio-anillo-156.svg" alt="" width="156" height="156" />
+            <img src="assets/web/mapa-vacio-anillo-104.svg" alt="" width="104" height="104" />
+            <img src="assets/web/mapa-vacio-anillo-52.svg" alt="" width="52" height="52" />
+            <img src="assets/web/mapa-vacio-punto-18.svg" alt="" width="18" height="18" />
+          </div>
+        } @else {
         <div class="panel__lista">
           @for (pendiente of pendientes; track pendiente.id) {
             <a class="panel__item" [routerLink]="['/pendientes', pendiente.id]">
@@ -58,6 +75,7 @@ import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.mo
             </a>
           }
         </div>
+        }
       </aside>
     </section>
   `,
@@ -71,6 +89,11 @@ import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.mo
         box-shadow: inset 0 0 0 1px var(--ui-border);
         background: var(--ui-surface-sunken);
       }
+      .vacio-anillo--exterior { left: 8.5625rem; top: 3.5625rem; }
+      .vacio-anillo--medio { left: 12.5625rem; top: 7.5625rem; }
+      .vacio-anillo--interior { left: 16.5625rem; top: 11.5625rem; }
+      .vacio-punto { left: 19.875rem; top: 14.875rem; }
+      .vacio-etiqueta { position: absolute; left: 19.9375rem; top: 16.6875rem; font: 600 var(--ui-overline-size) / var(--ui-overline-line) var(--ui-font); letter-spacing: var(--ui-overline-track); color: var(--ui-text-secondary); }
       .mapa::before {
         content: ''; position: absolute; inset: 0;
         background-image: linear-gradient(to right, var(--ui-surface) 2px, transparent 2px),
@@ -111,6 +134,9 @@ import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.mo
         letter-spacing: var(--ui-h3-track); color: var(--ui-text-primary);
       }
       .panel__lista { margin-top: 0.625rem; }
+      .panel__vacio { margin-top: 1.125rem; color: var(--ui-text-secondary); font: 400 var(--ui-body-size) / var(--ui-body-line) var(--ui-font); }
+      .panel__ilustracion { position: relative; width: 9.75rem; height: 9.75rem; margin: 2.25rem auto 0; }
+      .panel__ilustracion img { position: absolute; top: 50%; left: 50%; display: block; max-width: none; transform: translate(-50%, -50%); }
       .panel__item {
         position: relative; display: block; height: 8.125rem; padding: 0.875rem 0 0 1.75rem;
         color: inherit; text-decoration: none;

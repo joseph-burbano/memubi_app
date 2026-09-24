@@ -70,7 +70,6 @@ export class ListaPage implements OnInit {
   }
 
   seleccionarVista(vista: 'lista' | 'mapa'): void {
-    if (vista === 'mapa' && this.pendientes.activos().length === 0) return;
     if (vista === 'mapa') this.mostrarAvisoGuardado.set(false);
     this.vista.set(vista);
   }
