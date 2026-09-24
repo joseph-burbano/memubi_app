@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, effect, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { BotonComponent } from '../../../ui/boton';
 import { PendientesStore } from '../../../core/store/pendientes.store';
 import { LocationService } from '../../../core/data/location.service';
@@ -14,7 +14,7 @@ let totalAntesDeCrear: number | null = null;
 @Component({
   selector: 'app-web-lista',
   standalone: true,
-  imports: [BotonComponent, PendienteCardWebComponent, MapaPendientesWebComponent, AvisoGuardadoWebComponent],
+  imports: [RouterLink, BotonComponent, PendienteCardWebComponent, MapaPendientesWebComponent, AvisoGuardadoWebComponent],
   templateUrl: './lista.page.html',
   styleUrl: './lista.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
