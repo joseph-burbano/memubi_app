@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { BotonComponent } from '../../../ui/boton';
 
 /** MW0: estado inicial de Mis pendientes. MW1 se incorporará a esta ruta. */
@@ -10,4 +11,10 @@ import { BotonComponent } from '../../../ui/boton';
   styleUrl: './lista.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListaPage {}
+export class ListaPage {
+  private readonly router = inject(Router);
+
+  irACrear(): void {
+    void this.router.navigate(['/crear']);
+  }
+}
