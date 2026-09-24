@@ -1,12 +1,49 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { BarraSuperiorComponent } from '../../ui/barra-superior';
 import { AnillosProximidadComponent } from '../../ui/anillos-proximidad';
 import { BarraAccionesComponent } from '../ui/barra-acciones';
 import { PendienteCardMobileComponent } from '../ui/pendiente-card.mobile';
 import { PendientesStore } from '../../../core/store/pendientes.store';
+import { Pendiente } from '../../../core/models/pendiente.model';
 
 /**
- * Mis pendientes. `MM12`, y `MM03` cuando la lista está vacía.
+ * Semillas para el andamio de creación. Salen del vocabulario del
+ * producto —categorías reales, direcciones de Madrid— para que la demo
+ * no muestre "Prueba 1" al lado de "Comprar leche".
+ */
+const SEMILLAS: ReadonlyArray<Omit<Pendiente, 'id' | 'estado'>> = [
+  // Los tres primeros son EXACTAMENTE los de MM12: tres toques y la
+  // pantalla queda igual que el mockup.
+  { titulo: 'Comprar leche', tipoUbicacion: 'categoria', categoria: 'supermercado', radioAviso: 500 },
+  { titulo: 'Recoger medicamento', tipoUbicacion: 'direccion', direccion: 'Farmacia cerca de Calle de Alcalá', radioAviso: 500 },
+  { titulo: 'Cambiar las cuerdas del cello', tipoUbicacion: 'direccion', direccion: 'Una dirección específica', radioAviso: 500 },
+  // De aquí en adelante, para seguir poblando la lista.
+  { titulo: 'Comprar pan', tipoUbicacion: 'direccion', direccion: 'Panadería del barrio', radioAviso: 500 },
+  { titulo: 'Comprar pilas', tipoUbicacion: 'categoria', categoria: 'ferreteria', radioAviso: 500 },
+  { titulo: 'Recoger la receta', tipoUbicacion: 'categoria', categoria: 'farmacia', radioAviso: 200 },
+  { titulo: 'Comprar café', tipoUbicacion: 'categoria', categoria: 'supermercado', radioAviso: 1000 },
+  { titulo: 'Cambiar el regalo', tipoUbicacion: 'categoria', categoria: 'centro-comercial', radioAviso: 1000 },
+  { titulo: 'Pasar por la tintorería', tipoUbicacion: 'direccion', direccion: 'Calle Mayor 12, Madrid', radioAviso: 200 },
+];
+
+const LETRAS = [
+  'cero', 'uno', 'dos', 'tres', 'cuatro',
+  'cinco', 'seis', 'siete', 'ocho', 'nueve',
+];
+
+/** Más allá de nueve vuelve a la cifra: "doce" empieza a estorbar. */
+function enLetra(n: number): string {
+  return LETRAS[n] ?? String(n);
+}
+
+function mayuscula(texto: string): string {
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
+/**
+ * Mis pendientes. `MM12`, `MM03` cuando está vacía y `MM13` cuando hay
+ * alguno completado.
  *
  * UNA PÁGINA, DOS ESTADOS. Son dos marcos en Figma, pero comparten
  * barra superior, título, barra inferior y hasta el mismo `h1`: lo único
@@ -60,14 +97,18 @@ import { PendientesStore } from '../../../core/store/pendientes.store';
           <ul class="lista__items">
             @for (pendiente of store.pendientes(); track pendiente.id) {
               <li>
-                <mob-pendiente-card [pendiente]="pendiente" />
+                <mob-pendiente-card
+                  [pendiente]="pendiente"
+                  (abrir)="abrir($event)"
+                  (dispararAlerta)="dispararAlerta($event)"
+                />
               </li>
             }
           </ul>
         }
       </main>
 
-      <mob-barra-acciones />
+      <mob-barra-acciones (crear)="crearDePrueba()" />
     </div>
   `,
   styles: [
@@ -76,7 +117,8 @@ import { PendientesStore } from '../../../core/store/pendientes.store';
         display: flex;
         flex-direction: column;
         height: 100dvh;
-        background: var(--ui-surface-alt);
+        /* Transparente para que se vea la textura del fondo. */
+        background: transparent;
       }
       .lista {
         flex: 1;
@@ -132,13 +174,60 @@ import { PendientesStore } from '../../../core/store/pendientes.store';
 })
 export class PendientesPage implements OnInit {
   readonly store = inject(PendientesStore);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     void this.store.cargar();
   }
 
+  /** MM12 -> MM14 (categoría) o MM15 (dirección), según el pendiente. */
+  abrir(id: string): void {
+    void this.router.navigate(['/pendientes', id]);
+  }
+
+  /**
+   * "Tres pendientes activos." (MM12) · "Dos activos y uno completado." (MM13)
+   *
+   * Los mockups escriben los números con letra, no con cifra. No es
+   * capricho: con este público un "3" suelto se lee peor que "tres".
+   */
+  /**
+   * ANDAMIO TEMPORAL — lo reemplaza el asistente de Joseph (MM04→MM11).
+   *
+   * Crea un pendiente de mentira para poder ver cómo crece el listado.
+   * Escribe por el mismo camino que usará el asistente real —el store y
+   * de ahí el repositorio—, así que lo que se demuestra aquí no es un
+   * truco de pantalla: es el backmock funcionando.
+   *
+   * Al cerrar la app se pierde, que es lo que se quiere para repetir la
+   * demostración desde cero.
+   */
+  async crearDePrueba(): Promise<void> {
+    // En orden y no al azar: así la demostración es repetible y los tres
+    // primeros toques reproducen MM12 tal cual.
+    const i = this.store.pendientes().length % SEMILLAS.length;
+    await this.store.guardar(SEMILLAS[i]);
+  }
+
+  /**
+   * Atajo de DEMOSTRACIÓN: mantener pulsada una tarjeta abre su alerta.
+   * En el producto real la dispara una geocerca del sistema operativo.
+   */
+  dispararAlerta(id: string): void {
+    void this.router.navigate(['/alerta', id]);
+  }
+
   subtitulo(): string {
-    const n = this.store.activos().length;
-    return n === 1 ? 'Un pendiente activo.' : `${n} pendientes activos.`;
+    const activos = this.store.activos().length;
+    const hechos = this.store.pendientes().length - activos;
+
+    if (hechos === 0) {
+      return activos === 1
+        ? 'Un pendiente activo.'
+        : `${mayuscula(enLetra(activos))} pendientes activos.`;
+    }
+    const a = activos === 1 ? 'uno activo' : `${enLetra(activos)} activos`;
+    const c = hechos === 1 ? 'uno completado' : `${enLetra(hechos)} completados`;
+    return `${mayuscula(a)} y ${c}.`;
   }
 }

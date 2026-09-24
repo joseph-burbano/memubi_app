@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, booleanAttribute } from '@angular/core';
 
 /**
  * Los anillos concéntricos del concepto visual.
@@ -18,6 +18,8 @@ import { Component, Input } from '@angular/core';
   template: `
     <svg
       class="anillos"
+      [class.anillos--apagado]="apagado"
+      [class.anillos--alerta]="alerta"
       viewBox="0 0 200 200"
       [attr.width]="tamano"
       [attr.height]="tamano"
@@ -45,10 +47,32 @@ import { Component, Input } from '@angular/core';
         fill: var(--ui-brand);
         stroke: none;
       }
+      /* MM02: sin permiso de ubicación no hay señal, y los anillos se
+       * apagan. El concepto visual cuenta el estado, no solo decora. */
+      .anillos--apagado circle {
+        stroke: var(--ui-border);
+      }
+      .anillos--apagado .anillos__centro {
+        fill: var(--ui-border-strong);
+      }
+      /* MM20: dentro de la tarjeta de alerta los anillos son ámbar. El
+       * teal ahí dentro se lee como un elemento ajeno. */
+      .anillos--alerta circle {
+        stroke: var(--ui-action);
+      }
+      .anillos--alerta .anillos__centro {
+        fill: var(--ui-action);
+      }
     `,
   ],
 })
 export class AnillosProximidadComponent {
-  /** Lado en px. MM01 usa 304; MM03, 204. */
+  /** Lado en px. MM01 usa 304; MM03 y MM21, 204; la alerta, 120. */
   @Input() tamano = 204;
+
+  /** En gris, para cuando la ubicación está desactivada (MM02). */
+  @Input({ transform: booleanAttribute }) apagado = false;
+
+  /** En ámbar, dentro de la tarjeta de alerta (MM20). */
+  @Input({ transform: booleanAttribute }) alerta = false;
 }

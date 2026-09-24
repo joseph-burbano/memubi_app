@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Categoria } from '../models/categoria.model';
 import { Coordenada, Lugar } from '../models/lugar.model';
-import { RadioAviso } from '../models/radio.model';
 import { LUGARES_MOCK, POSICION_MOCK } from '../mock/lugares.mock';
 import { LocationService } from './location.service';
 
@@ -18,12 +17,7 @@ export class LocationServiceMock extends LocationService {
     return { ...POSICION_MOCK };
   }
 
-  async lugaresCercanos(
-    categoria: Categoria,
-    radio: RadioAviso,
-  ): Promise<Lugar[]> {
-    return (LUGARES_MOCK[categoria] ?? [])
-      .filter((l) => l.distanciaMetros <= radio)
-      .map((l) => ({ ...l }));
+  async lugaresCercanos(categoria: Categoria): Promise<Lugar[]> {
+    return (LUGARES_MOCK[categoria] ?? []).map((l) => ({ ...l }));
   }
 }

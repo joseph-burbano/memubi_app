@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 /**
  * Barra superior de la app móvil.
@@ -22,19 +22,41 @@ import { Component } from '@angular/core';
  *
  * Es el tipo de cosa que solo se ve corriendo la app en el dispositivo,
  * que es exactamente para lo que existe un prototipo no funcional.
+ *
+ * DOS VARIANTES, no dos componentes:
+ *   sin `titulo`  ->  logo + "MemUbi"           (MM01, MM03, MM12, MM21)
+ *   con `titulo`  ->  flecha atrás + el título  (MM14, MM15, MM20b)
+ *
+ * Es la misma barra con el mismo alto y el mismo fondo; solo cambia qué
+ * lleva dentro. Partirla en dos obligaría a mantener el alto, el color y
+ * el comportamiento de la barra de sistema en dos sitios.
  */
 @Component({
   selector: 'mob-barra-superior',
   standalone: true,
   template: `
     <header class="barra">
-      <div class="barra__marca">
-        <span class="barra__logo" aria-hidden="true">
-          <span class="barra__logo-anillo"></span>
-          <span class="barra__logo-punto"></span>
-        </span>
-        <span class="barra__nombre">MemUbi</span>
-      </div>
+      @if (titulo) {
+        <div class="barra__marca">
+          <button
+            class="barra__atras"
+            type="button"
+            aria-label="Volver"
+            (click)="atras.emit()"
+          >
+            <span aria-hidden="true">‹</span>
+          </button>
+          <h1 class="barra__titulo">{{ titulo }}</h1>
+        </div>
+      } @else {
+        <div class="barra__marca">
+          <span class="barra__logo" aria-hidden="true">
+            <span class="barra__logo-anillo"></span>
+            <span class="barra__logo-punto"></span>
+          </span>
+          <span class="barra__nombre">MemUbi</span>
+        </div>
+      }
     </header>
   `,
   styles: [
@@ -85,11 +107,38 @@ import { Component } from '@angular/core';
         background: var(--ui-action);
         border-radius: var(--ui-radius-pill);
       }
-      .barra__nombre {
+      .barra__nombre,
+      .barra__titulo {
+        margin: 0;
         font: 600 var(--ui-h3-size) / var(--ui-h3-line) var(--ui-font);
         letter-spacing: var(--ui-h3-track);
+      }
+      /* Objetivo táctil de 44px: la flecha dibujada es pequeña, pero el
+       * área que responde al dedo no puede serlo. */
+      .barra__atras {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        margin-left: -0.75rem;
+        background: none;
+        border: none;
+        color: inherit;
+        font: 600 var(--ui-h2-size) / 1 var(--ui-font);
+        cursor: pointer;
+      }
+      .barra__atras:focus-visible {
+        outline: 2px solid var(--ui-text-inverse);
+        outline-offset: -2px;
+        border-radius: var(--ui-radius-sm);
       }
     `,
   ],
 })
-export class BarraSuperiorComponent {}
+export class BarraSuperiorComponent {
+  /** Sin título muestra la marca; con título, flecha atrás y el texto. */
+  @Input() titulo = '';
+
+  @Output() atras = new EventEmitter<void>();
+}

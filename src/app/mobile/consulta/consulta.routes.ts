@@ -45,4 +45,53 @@ export const MOBILE_CONSULTA_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/pendientes.page').then((m) => m.PendientesPage),
   },
+  {
+    // MM14, MM15 y MM20b. La rama sale del pendiente; el origen, de
+    // ?desde=alerta, que solo cambia la barra de acciones.
+    path: 'pendientes/:id',
+    loadComponent: () =>
+      import('./pages/detalle.page').then((m) => m.DetallePage),
+  },
+  {
+    // MM20. No se dispara por GPS: se llega porque la ruta lleva aquí.
+    path: 'alerta/:id',
+    loadComponent: () =>
+      import('./pages/alerta.page').then((m) => m.AlertaPage),
+  },
+  {
+    // MM21. `data` alimenta el input `desenlace` gracias a
+    // withComponentInputBinding(): el desenlace es parte del recorrido,
+    // no algo que el usuario escriba en la URL.
+    path: 'realizado/:id',
+    data: { desenlace: 'realizado' },
+    loadComponent: () =>
+      import('./pages/desenlace.page').then((m) => m.DesenlacePage),
+  },
+  {
+    // MM22. Misma página que MM21, otro desenlace.
+    path: 'proximo-lugar/:id',
+    data: { desenlace: 'sigue-activo' },
+    loadComponent: () =>
+      import('./pages/desenlace.page').then((m) => m.DesenlacePage),
+  },
+  {
+    // MM23
+    path: 'configuracion',
+    loadComponent: () =>
+      import('./pages/configuracion.page').then((m) => m.ConfiguracionPage),
+  },
+  {
+    // MM25
+    path: 'privacidad/datos',
+    loadComponent: () =>
+      import('./pages/privacidad-datos.page').then((m) => m.PrivacidadDatosPage),
+  },
+  {
+    // MM24 y MM24b: el interruptor es un estado, no otra pantalla.
+    path: 'privacidad/ubicacion',
+    loadComponent: () =>
+      import('./pages/privacidad-ubicacion.page').then(
+        (m) => m.PrivacidadUbicacionPage,
+      ),
+  },
 ];

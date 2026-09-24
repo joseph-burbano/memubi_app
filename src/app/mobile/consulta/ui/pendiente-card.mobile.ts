@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ChipComponent } from '../../../ui/chip';
 import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.model';
 
@@ -18,13 +18,37 @@ import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.mo
  *
  * La tarjeta NO muestra la distancia: no está en el mockup, y agregarla
  * sería inventar producto sin validarlo.
+ *
+ * PULSACIÓN LARGA = DISPARA LA ALERTA de ese pendiente.
+ *
+ * Es el disparador de la demo. En el producto real la alerta la lanza
+ * una geocerca registrada en el sistema operativo; aquí no hay GPS, así
+ * que hacía falta una forma de entrar al flujo.
+ *
+ * Se eligió mantener pulsado, y no un botón, porque NO AGREGA UN SOLO
+ * PÍXEL a la pantalla: el mockup se respeta al milímetro y el recorrido
+ * se puede demostrar con el dedo. Un elemento visible habría sido
+ * inventar interfaz que el diseño no tiene.
+ *
+ * Al sustentar conviene decirlo así: es un atajo de demostración, no una
+ * función del producto.
  */
 @Component({
   selector: 'mob-pendiente-card',
   standalone: true,
   imports: [ChipComponent],
   template: `
-    <button class="tarjeta" type="button">
+    <button
+      class="tarjeta"
+      type="button"
+      [class.tarjeta--completado]="completado"
+      (click)="alSoltarClick()"
+      (pointerdown)="iniciarPulsacion()"
+      (pointerup)="cancelarPulsacion()"
+      (pointerleave)="cancelarPulsacion()"
+      (pointercancel)="cancelarPulsacion()"
+      (contextmenu)="$event.preventDefault()"
+    >
       <span class="tarjeta__marca" aria-hidden="true">
         <span class="tarjeta__anillo"></span>
         <span class="tarjeta__punto"></span>
@@ -33,8 +57,8 @@ import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.mo
         <span class="tarjeta__titulo">{{ pendiente.titulo }}</span>
         <span class="tarjeta__lugar">{{ ubicacion }}</span>
         <span class="tarjeta__estado">
-          <ui-chip [variante]="pendiente.estado === 'activo' ? 'activo' : 'apagado'">
-            {{ pendiente.estado === 'activo' ? 'Activo' : 'Realizado' }}
+          <ui-chip [variante]="completado ? 'apagado' : 'activo'">
+            {{ completado ? 'Completado' : 'Activo' }}
           </ui-chip>
         </span>
       </span>
@@ -54,6 +78,11 @@ import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.mo
         border-radius: var(--ui-radius-md);
         text-align: left;
         cursor: pointer;
+        /* Sin esto, mantener pulsado en Android abre el menú de
+         * selección de texto en vez de disparar la alerta. */
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
       }
       .tarjeta:focus-visible {
         outline: 2px solid var(--ui-brand);
@@ -100,11 +129,70 @@ import { Pendiente, describirUbicacion } from '../../../core/models/pendiente.mo
       .tarjeta__estado {
         margin-top: 0.125rem;
       }
+
+      /* MM13. El tachado es lo que comunica "ya está hecho"; el gris
+       * solo lo acompaña. Con el color solo, alguien que no distingue
+       * bien los grises no vería la diferencia. */
+      .tarjeta--completado .tarjeta__titulo {
+        color: var(--ui-text-disabled);
+        text-decoration: line-through;
+      }
+      .tarjeta--completado .tarjeta__lugar {
+        color: var(--ui-text-disabled);
+      }
+      .tarjeta--completado .tarjeta__anillo {
+        border-color: var(--ui-border-strong);
+      }
+      .tarjeta--completado .tarjeta__punto {
+        background: var(--ui-border-strong);
+      }
     `,
   ],
 })
 export class PendienteCardMobileComponent {
   @Input({ required: true }) pendiente!: Pendiente;
+
+  /** La tarjeta entera navega al detalle: MM12 -> MM14 / MM15. */
+  @Output() abrir = new EventEmitter<string>();
+
+  /** Pulsación larga: dispara la alerta de este pendiente (demo). */
+  @Output() dispararAlerta = new EventEmitter<string>();
+
+  private temporizador?: ReturnType<typeof setTimeout>;
+  private fueLarga = false;
+
+  iniciarPulsacion(): void {
+    // Un pendiente ya completado NO vuelve a avisar. Sin este guardia,
+    // mantenerlo pulsado abría su alerta y desde ahí se podía marcar de
+    // nuevo, que es como revivirlo.
+    if (this.completado) return;
+
+    this.fueLarga = false;
+    this.temporizador = setTimeout(() => {
+      this.fueLarga = true;
+      this.dispararAlerta.emit(this.pendiente.id);
+    }, 600);
+  }
+
+  cancelarPulsacion(): void {
+    clearTimeout(this.temporizador);
+  }
+
+  /**
+   * Tras una pulsación larga el navegador emite igual el click. Sin este
+   * guardia, la alerta se abriría y encima navegaría al detalle.
+   */
+  alSoltarClick(): void {
+    if (this.fueLarga) {
+      this.fueLarga = false;
+      return;
+    }
+    this.abrir.emit(this.pendiente.id);
+  }
+
+  get completado(): boolean {
+    return this.pendiente.estado === 'realizado';
+  }
 
   get ubicacion(): string {
     return describirUbicacion(this.pendiente);

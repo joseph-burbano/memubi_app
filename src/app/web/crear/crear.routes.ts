@@ -39,9 +39,16 @@ import { Routes } from '@angular/router';
  *     Elegir un lugar concreto solo existe en la rama dirección.
  */
 export const WEB_CREAR_ROUTES: Routes = [
-  // {
-  //   path: 'crear',
-  //   loadComponent: () =>
-  //     import('./pages/crear.page').then((m) => m.CrearPage),
-  // },
+  {
+    // MW2 y sus siete estados: categoría elegida, rama dirección, sin
+    // completar, las cuatro categorías y los tres radios. UNA página.
+    path: 'crear',
+    loadComponent: () => import('./pages/crear.page').then((m) => m.CrearPage),
+  },
+  {
+    // MW5 y MW5b: la MISMA página que crear. La Entrega 3 pide que
+    // editar sea un clon, no una imitación.
+    path: 'editar/:id',
+    loadComponent: () => import('./pages/crear.page').then((m) => m.CrearPage),
+  },
 ];
